@@ -1,2 +1,2 @@
 # Celebrate
-Let celebrate! together with the golden orchestra.
+Let's celebrate! together with the golden orchestra.
