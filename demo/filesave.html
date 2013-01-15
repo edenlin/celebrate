@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head></head>
+<body>
+Filesave - file save API demo<br>
+After clicking <code>save</code>, a dialog box should appear to save a file <code>out.txt</code>,<br>
+with content <code>Hello, world!</code> inside.<br>
+<script src='../third_party/FileSaver.js'></script>
+<script src='../third_party/BlobBuilder.js'></script>
+<script>
+function save_file()
+{
+	var bb = new BlobBuilder;
+	bb.append("Hello, world!");
+	var blob = bb.getBlob("text/plain;charset=utf-8");
+	saveAs(blob, 'out.txt');
+}
+</script>
+<button onclick='save_file()'>save</button>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<body>
+demo of the buzz library<br>
+
+<div id='timer'>not loaded</div>
+<script src='../third_party/buzz.js'></script>
+<script>
+var mysound = new buzz.sound('../music/Jubilant', {
+    formats: ['mp3','ogg']
+});
+
+mysound
+.play()
+.bind('timeupdate', function(e) {
+    var timer = buzz.toTimer(this.getTime());
+    document.getElementById('timer').innerHTML = timer;
+});
+</script>
+
+</body>

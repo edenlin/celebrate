@@ -1,0 +1,51 @@
+<head>
+<style>
+.bar
+{
+	position: absolute;
+	border-left: 1px solid #66F;
+	width: 0px;
+}
+#wave
+{
+	position: relative;
+	height: 400px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+</style>
+</head>
+
+<body>
+Waveform<br>
+<div id='wave'></div>
+<script src='../music/Jubilant-sample.js'></script>
+<script>
+var height=400;
+var horiscale=120;
+for( var i=0; i<data.data.length; i++)
+{
+	value(data.data[i]);
+}
+//
+function value(sam)
+{
+	var wave=document.getElementById('wave');
+	var bar = document.createElement('div');
+	bar.setAttribute('class','bar');
+	if( sam.v>0)
+	{
+		bar.style.height=(sam.v+'px');
+		bar.style.top=(height/2-sam.v)+'px';
+	}
+	else
+	{
+		bar.style.height=(-sam.v+'px');
+		bar.style.top=(height/2)+'px';
+	}
+	bar.style.left=(sam.t*horiscale)+'px';
+	wave.appendChild(bar);
+	return bar;
+}
+</script>
+</body>

@@ -1,0 +1,80 @@
+<body>
+demo of Mozilla only audio data API<br>
+play the music, and after the music have been finished, click export.<br>
+<audio id="mysound"
+           src="../music/Jubilant.ogg"
+           controls="true"
+           style="width: 512px;">
+</audio>
+<button id='export'>export</button>
+<br>
+<textarea id='data' style='width: 512px; height: 400px;'>no data</textarea>
+
+<script src='../third_party/FileSaver.js'></script>
+<script src='../third_party/BlobBuilder.js'></script>
+<script>
+var $=function (id)
+{
+	return document.getElementById(id);
+}
+
+var audio=$('mysound');
+audio.addEventListener('MozAudioAvailable', audioAvailable, false);
+audio.addEventListener('loadedmetadata', loadedMetadata, false);
+
+var channels, rate, frameBufferLength
+var data=$('data');
+var dump={data:[]};
+
+function loadedMetadata()
+{
+	channels          = audio.mozChannels;
+	rate              = audio.mozSampleRate;
+	frameBufferLength = audio.mozFrameBufferLength;
+	dump.channels=channels;
+	dump.sampleRate=rate;
+	dump.frameBufferLength=frameBufferLength;
+}
+
+function audioAvailable(event)
+{
+	var fb = event.frameBuffer,
+		t  = event.time,
+		signal = new Float32Array(fb.length / channels),
+		magnitude;
+
+	for (var i = 0, fbl = frameBufferLength / 2; i < fbl; i++ )
+	{
+		// Assuming interlaced stereo channels,
+		// need to split and merge into a stero-mix mono signal
+		signal[i] = (fb[2*i] + fb[2*i+1]) / 2;
+	}
+	dump.data.push({t:round(t,4),v:round(256*signal[0],0)});
+}
+
+$('export').onclick=function()
+{
+	var bb = new BlobBuilder;
+	var string='data=\n'+JSON.stringify(dump,null,' ')+'\n;';
+	bb.append(string);
+	var blob = bb.getBlob("text/plain;charset=utf-8");
+	saveAs(blob, 'out.txt');
+
+	data.value=string;
+
+	/* var str='';
+	for( var i=0; i<100; i++)
+		str+=1/(alldata[i+1].t-alldata[i].t)+',';
+	alert(str); */
+}
+
+function round(v,d)
+{
+	var exp=1;
+	for( var i=0; i<d; i++)
+		exp*=10;
+	return Math.round(v*exp)/exp;
+}
+</script>
+
+</body>

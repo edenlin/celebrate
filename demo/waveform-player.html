@@ -1,0 +1,100 @@
+<head>
+<style>
+.bar
+{
+	position: absolute;
+	border-left: 1px solid #66F;
+	width: 0px;
+}
+#wave
+{
+	position: relative;
+	height: 400px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+</style>
+</head>
+
+<body>
+<div id='wave'></div>
+<div id='timer'>nan</div>
+<script src='../music/Jubilant-sample.js'></script>
+<script src='../third_party/buzz.js'></script>
+<script>
+var height=400;
+var horiscale=120;
+var cursor=value(height/2);
+var wave=document.getElementById('wave');
+var timer=document.getElementById('timer');
+var lasttime=0;
+var starttime=0;
+cursor.style.borderLeft='1px solid #F66';
+cursor.style.top='0px';
+cursor.style.left='0px';
+cursor.style.height=height+'px';
+for( var i=0; i<data.data.length; i++)
+{
+	value(data.data[i]);
+}
+//
+var mysound = new buzz.sound('../music/Jubilant', {
+    formats: ['mp3','ogg'],
+    preload: true,
+    autoplay: false,
+    loop: false
+});
+mysound
+.play()
+.bind('timeupdate', function(e) {
+	var t=this.getTime();
+	//
+    cursor.style.left=round(t*horiscale)+'px';
+    if( t*horiscale - wave.scrollLeft > 900)
+		wave.scrollLeft=round(t*horiscale-50);
+	timer.innerHTML=t+'/'+((new Date().getTime()-starttime)/1000);
+	//
+	lasttime=new Date().getTime();
+})
+.bind('play', function(e) {
+	starttime = new Date().getTime();
+})
+//
+setInterval(function(){
+	var curtime = new Date().getTime();
+	var x=parseInt(cursor.style.left);
+	x += (curtime-lasttime)*horiscale/1000;
+	cursor.style.left=round(x)+'px';
+	lasttime=curtime;
+}, 1000/20);
+//
+function value(sam)
+{
+	var wave=document.getElementById('wave');
+	var bar = document.createElement('div');
+	bar.setAttribute('class','bar');
+	if( sam.v>0)
+	{
+		bar.style.height=(sam.v+'px');
+		bar.style.top=(height/2-sam.v)+'px';
+	}
+	else
+	{
+		bar.style.height=(-sam.v+'px');
+		bar.style.top=(height/2)+'px';
+	}
+	bar.style.left=round(sam.t*horiscale)+'px';
+	wave.appendChild(bar);
+	return bar;
+}
+function round(v,d)
+{
+	if(d===undefined || d===null)
+		d=2;
+	var exp=1;
+	for( var i=0; i<d; i++)
+		exp*=10;
+	return Math.round(v*exp)/exp;
+}
+</script>
+</body>
