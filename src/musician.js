@@ -1,4 +1,4 @@
-define(['cele/sprite-data','core/sprite','core/animator'],
+define(['cele/sprite-data','F.core/sprite','F.core/animator'],
 function(sprite_data, Fsprite, Fanimator)
 {
 	function Musi(div,spid)

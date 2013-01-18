@@ -1,4 +1,4 @@
-define(['core/css!celebrate/src/drum.css','third_party/buzz','core/effects-pool'],
+define(['F.core/css!celebrate/src/drum.css','third_party/buzz','F.core/effects-pool'],
 function(dumpcss,dumpbuzz,Feffects_pool)
 {
 	function drumset( drumsetel )
