@@ -1,68 +1,67 @@
-var sprite_list=
-[
+define({
+	'369':
 	{
-		name: '369',
 		w:23, h:34,
-		ani:[0,1]
+		ani:[0,1,2]
 	},
+	'agree':
 	{
-		name: 'agree',
 		w:26, h:28,
 		ani:[22,21,20]
 	},
+	'banghead':
 	{
-		name: 'banghead',
 		w:35, h:27,
 		ani:[2,3,4,5,6]
 	},
+	'bouncer':
 	{
-		name: 'bouncer',
 		w:72, h:68,
 		ani:[21,22,23,24,12,13,14,20]
 	},
+	'bouncerlm':
 	{
-		name: 'bouncerlm',
 		w:43, h:82,
 		ani:[30,31,32,33,34,35,36,37,38]
 	},
+	'clown3':
 	{
-		name: 'clown3',
 		w:50, h:50,
 		ani:[70,71,72,73,74,80,81,82,83,84,85,86]
 	},
+	'diulm':
 	{
-		name: 'diulm',
 		w:45, h:32,
 		ani:[30,31,32]
 	},
+	'hehelm':
 	{
-		name: 'hehelm',
 		w:32, h:32,
 		ani:[13,14,15,15,14,13]
 	},
+	'hoho':
 	{
-		name: 'hoho',
 		w:59, h:18,
 		ani:[120,121,122,123]
 	},
+	'hoholm':
 	{
-		name: 'hoholm',
 		w:96, h:32,
 		ani:[150,152,153]
 	},
+	'hoho2':
 	{
-		name: 'hoho2',
 		w:59, h:18,
-		ani:[182,183,184,185,184,183,182]
+		ani:[5,15,15,25,15,15,5]
 	},
+	'sosad2':
 	{
-		name: 'sosad2',
 		w:23, h:21,
 		ani:[250,251,252,253,254,255,256,257,258,259]
 	},
+	'sosad3':
 	{
-		name: 'sosad3',
 		w:29, h:30,
 		ani:[150,151,152,153,154,155,156,157,158,159]
 	}
-];
+});

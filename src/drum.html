@@ -1,0 +1,115 @@
+<head>
+<style>
+/*crash*/
+#dr
+{
+	left: 50px; top: 60px;
+}
+#dt
+{
+	left: 140px; top: 50px;
+}
+#dy
+{
+	left: 240px; top: 50px;
+}
+#d4
+{
+	left: 75px; top: 85px;
+}
+#d5
+{
+	left: 160px; top: 70px;
+}
+#d6
+{
+	left: 261.5px; top: 71.5px;
+}
+#d7
+{
+	left: 320px; top: 90px;
+}
+/*drums*/
+#df
+{
+	left: 20px; top: 150px;
+}
+#dg
+{
+	left: 120px; top: 125px;
+}
+#dh
+{
+	left: 220px; top: 120px;
+}
+#dj
+{
+	left: 310px; top: 130px;
+}
+/**/
+#dv
+{
+	left: 40px; top: 150px;
+}
+#db
+{
+	left: 135px; top: 125px;
+}
+#dn
+{
+	left: 223px; top: 120px;
+}
+#dm
+{
+	left: 320px; top: 130px;
+}
+</style>
+</head>
+
+<body>
+Drumset
+<div id='drumset'>
+
+	<div id='df' sound='AMB_FTM2.mp3' radius='55' img='drum.png'>fv</div>
+	<div id='dg' sound='AMB_RIM1.mp3' radius='45' img='drum.png'><span style='float:right;'>gb</span></div>
+	<div id='dh' sound='AMB_RIM1.mp3' radius='45' img='drum.png'>hn</div>
+	<div id='dj' sound='AMB_HTM.mp3' radius='60' img='drum.png'>jm</div>
+
+	<div id='dv' sound='AMB_LTM2.mp3' radius='40'></div>
+	<div id='db' sound='AMB_SN13.mp3' radius='35'></div>
+	<div id='dn' sound='AMB_SN_5.mp3' radius='35'></div>
+	<div id='dm' sound='AMB_MTM.mp3' radius='45'></div>
+
+	<div id='dr' sound='AMB_HHOP.mp3' radius='50' img='crash.png'>r</div>
+	<div id='dt' sound='AMB_HHPD.mp3' radius='40' img='crash.png'>t</div>
+	<div id='dy' sound='AMB_HHCL.mp3' radius='43' img='crash2.png'>y</div>
+
+	<div id='d4' sound='CHINA_1.mp3' radius='25' vol='70'>4</div>
+	<div id='d5' sound='CRASH_1.mp3' radius='20' vol='45'>5</div>
+	<div id='d6' sound='CRASH_5.mp3' radius='20' vol='70'>6</div>
+	<div id='d7' sound='CRASH_6.mp3' radius='25' img='crash2.png'>7</div>
+	<!-- AMB_BD_1.mp3, RIDE_1.mp3
+	<div id='du'>u</div>
+	-->
+</div>
+
+<script src="../third_party/require.js"></script>
+<script>
+requirejs.config({
+	baseUrl: '../../',
+	paths: {
+		'cele':'celebrate/src',
+		'third_party':'celebrate/third_party'
+	}
+});
+requirejs(['cele/drum'],function(Drum)
+{
+	var drumset = new Drum($('drumset'));
+	//
+	function $(id)
+	{
+		return document.getElementById(id);
+	}
+});
+</script>
+</body>
