@@ -1,10 +1,604 @@
-<html>
 <head>
-	<meta http-equiv='content-type' content='text/html; charset=UTF-8'>
-	<script data-main="main.js" src="../third_party/require.js"></script>
+<meta http-equiv='content-type' content='text/html; charset=UTF-8'>
+<script src='../third_party/head.load.min.js'></script>
+<style>
+.bar
+{
+	position: absolute;
+	border-left: 1px solid #66F;
+	width: 0px;
+}
+.anchor
+{
+	position: absolute;
+	width: 10px;
+	height: 40px;
+	cursor: w-resize;
+}
+.lyrics
+{
+	width: auto;
+	color: #FFF;
+	background-color: #668;
+	font-size: 20px;
+	white-space: nowrap;
+}
+#wave
+{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#wave
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 99%;
+	height: 410px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+#seeker
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 30px;
+	background-color: #EEE;
+	cursor: e-resize;
+}
+.timescale
+{
+	border-left: 1px solid #888;
+	float: left;
+	height: 100%;
+	font-size: 12px;
+}
+#toolbar
+{
+	position: absolute;
+	left: 0px;
+	top: 410px;
+	width: 99%;
+	line-height: 30px;
+}
+.panel
+{
+	width: 49.5%;
+	float: left;
+}
+.dialog
+{
+	border: 1px solid #AAA;
+	width: 100%;
+	float: left;
+}
+.tool
+{
+	float: left;
+	height: 28px;
+}
+#timer
+{
+	width: 80px;
+	height: 25px;
+	border: 1px solid #AAA;
+}
+#ly-box
+{
+	width: 200px;
+}
+#texter
+{
+	float: left;
+	width: 100%;
+	height: 240px;
+}
+#drumset
+{
+	height: 240px;
+}
+#drumset-dialog
+{
+	position: relative;
+}
+</style>
 </head>
 
 <body>
 
+<div id='wave'>
+	<div id='seeker'></div>
+	<div id='bt-holder'></div>
+	<div id='ly-holder'></div>
+	<div id='waveform'></div>
+</div>
+
+<div id='toolbar'>
+
+	<div class='panel'>
+		<div class='dialog'>
+			<button id='pause' class='tool'></button>
+			<div id='timer' class='tool'>nan</div>
+		</div>
+
+		<br>
+		<div class='dialog' id='drumset-dialog'>
+			Drumset
+			<div id='drumset'>
+
+				<div id='df' sound='AMB_FTM2.mp3' radius='55' img='drum.png'>fv</div>
+				<div id='dg' sound='AMB_RIM1.mp3' radius='45' img='drum.png'>
+					<span style='float:right;'>gb</span>
+				</div>
+				<div id='dh' sound='AMB_RIM1.mp3' radius='45' img='drum.png'>hn</div>
+				<div id='dj' sound='AMB_HTM.mp3' radius='60' img='drum.png'>jm</div>
+
+				<div id='dv' sound='AMB_LTM2.mp3' radius='40'></div>
+				<div id='db' sound='AMB_SN13.mp3' radius='35'></div>
+				<div id='dn' sound='AMB_SN_5.mp3' radius='35'></div>
+				<div id='dm' sound='AMB_MTM.mp3' radius='45'></div>
+
+				<div id='dr' sound='AMB_HHOP.mp3' radius='50' img='crash.png' vol='70'>r</div>
+				<div id='dt' sound='AMB_HHPD.mp3' radius='40' img='crash.png' vol='70'>t</div>
+				<div id='dy' sound='AMB_HHCL.mp3' radius='43' img='crash2.png' vol='70'>y</div>
+
+				<div id='d4' sound='CHINA_1.mp3' radius='25' vol='70'>4</div>
+				<div id='d5' sound='CRASH_1.mp3' radius='20' vol='45'>5</div>
+				<div id='d6' sound='CRASH_5.mp3' radius='20' vol='70'>6</div>
+				<div id='d7' sound='CRASH_6.mp3' radius='25' img='crash2.png'>7</div>
+				<!-- AMB_BD_1.mp3, RIDE_1.mp3
+				<div id='du'>u</div> triggered by key 'u'
+				-->
+				<style>
+				/*crash*/
+				#dr
+				{ left: 50px; top: 60px; }
+				#dt
+				{ left: 140px; top: 50px; }
+				#dy
+				{ left: 240px; top: 50px; }
+				#d4
+				{ left: 75px; top: 85px; }
+				#d5
+				{ left: 160px; top: 70px; }
+				#d6
+				{ left: 261.5px; top: 71.5px; }
+				#d7
+				{ left: 330px; top: 80px; }
+				/*drums*/
+				#df
+				{ left: 20px; top: 150px; }
+				#dg
+				{ left: 120px; top: 125px; }
+				#dh
+				{ left: 220px; top: 120px; }
+				#dj
+				{ left: 310px; top: 130px; }
+				/**/
+				#dv
+				{ left: 40px; top: 150px; }
+				#db
+				{ left: 135px; top: 125px; }
+				#dn
+				{ left: 223px; top: 120px; }
+				#dm
+				{ left: 320px; top: 130px; }
+				</style>
+			</div><!--drumset-->
+		</div><!--drumset dialog-->
+	</div>
+
+	<div class='panel'>
+		<div class='dialog'>
+			<button id='addlyrics' class='tool'>[L] add lyrics</button>
+			<input id='ly-box' class='tool' value="lyrics here"/>
+			<button id='delete' class='tool'>[D] delete</button>
+			<br>
+			<button id='openmusic' class='tool'>open music</button>
+			<div id='openform'>
+				<br>
+				music file: <input id='openform-music' value='../music/Jubilant.mp3' /><br>
+				waveform file: <input id='openform-waveform' value='../music/Jubilant-sample.js' /><br>
+				HD: <input id='openform-hd' type='checkbox' />
+			</div>
+			<div class='tool' style='width:40px;'></div>
+			<button id='import' class='tool'>import</button>
+			<button id='export' class='tool'>export</button>
+			<textarea id='texter' class='tool'>
+			</textarea>
+		</div>
+	</div>
+
+</div>
+
+
+<script>
+(function()
+{
+	//set up
+	var height=410;
+	var horiscale=120;
+	var lasttime=0;
+	var mysound;
+	var dragging=null;
+	var store;
+	var cursor;
+	var cursor_timer;
+
+	// load waveform file
+	load_waveform('../music/Jubilant-sample.js');
+	function load_waveform(filepath)
+	{
+		head.js(filepath,function()
+		{
+			create_cursor();
+			create_waveform();
+		});
+	}
+
+	// load sound
+	head.js('../third_party/require.js',function()
+	{
+		requirejs.config({
+			baseUrl: '../../',
+			paths: {
+				'cele':'celebrate/src',
+				'third_party':'celebrate/third_party'
+			}
+		});
+		//
+		requirejs(['cele/drum'],
+		function(Drum)
+		{
+			var drumset = new Drum($('drumset'));
+			// buzz is required by drum
+			load_sound('../music/Jubilant');
+		});
+	});
+	function load_sound(filepath)
+	{
+		var has_extension=false;
+		if( filepath.indexOf('.mp3')!==-1 ||
+		    filepath.indexOf('.ogg')!==-1 ||
+		    filepath.indexOf('.wav')!==-1 )
+			has_extension=true;
+
+		mysound = new buzz.sound( filepath,
+		{
+			formats: has_extension ? null:['mp3','ogg'],
+			preload: true,
+			autoplay: false,
+			loop: false
+		});
+		mysound
+		.bind('timeupdate', function(e)
+		{
+			var t=this.getTime();
+			//
+			cursor.style.left=round(t*horiscale)+'px';
+			var diff= t*horiscale - $('wave').scrollLeft;
+			if( diff>900 || diff<0)
+				$('wave').scrollLeft=round(t*horiscale-50);
+			if( t<1)
+				$('wave').scrollLeft=1;
+			$('timer').innerHTML=t;
+			//
+			lasttime=new Date().getTime();
+		})
+		.bind('loadedmetadata', function()
+		{
+			create_timescale();
+		});
+	}
+
+	// load others
+	$('openform').style.display='none';
+	$('openmusic').onclick=function()
+	{
+		if( this.innerHTML==='open music')
+		{
+			this.innerHTML='load';
+			$('openform').style.display='';
+		}
+		else
+		{
+			this.innerHTML='open music';
+			$('openform').style.display='none';
+			clear_div($('seeker'));
+			clear_div($('bt-holder'));
+			clear_div($('ly-holder'));
+			clear_div($('waveform'));
+			load_sound($('openform-music').value);
+			load_waveform($('openform-waveform').value);
+		}
+	}
+
+	// waveform
+	function create_waveform()
+	{
+		var step=5;
+		if( $('openform-hd').checked)
+			step=1;
+		for( var i=0; i<data.data.length; i+=step)
+		{
+			value(data.data[i]);
+		}
+	}
+	function value(sam)
+	{
+		var bar = document.createElement('div');
+		bar.setAttribute('class','bar');
+		var V= sam.v>0 ? sam.v:-sam.v;
+		bar.style.height=(V*2+'px');
+		bar.style.top=(height/2-V)+'px';
+		bar.style.left=round(sam.t*horiscale)+'px';
+		$('waveform').appendChild(bar);
+		return bar;
+	}
+
+	// cursor
+	function create_cursor()
+	{
+		cursor=value({t:0,v:height});
+		cursor.style.borderLeft='2px solid #F66';
+		cursor.style.top='0px';
+		cursor.style.left='0px';
+		cursor.style.height=height+'px';
+	}
+	cursor_timer = setInterval(function()
+	{
+		var curtime = new Date().getTime();
+		if( mysound)
+		if( !mysound.isPaused())
+		{
+			var x=parseInt(cursor.style.left);
+			x += (curtime-lasttime)*horiscale/1000;
+			cursor.style.left=round(x)+'px';
+		}
+		lasttime=curtime;
+	}, 1000/20);
+
+	// seeker controls
+	$('pause').innerHTML='[p] play';
+	$('pause').onclick=function()
+	{
+		if( this.innerHTML==='[p] pause')
+		{
+			mysound.pause();
+			this.innerHTML='[p] play';
+		}
+		else
+		{
+			mysound.play();
+			this.innerHTML='[p] pause';
+		}
+	}
+	function create_timescale(duration)
+	{
+		$('seeker').style.width= mysound.getDuration() * horiscale+'px';
+		for( var i=0, lim=round(mysound.getDuration(),0); i<lim; i++)
+		{
+			var scale= document.createElement('div');
+			scale.innerHTML= i;
+			scale.setAttribute('class','timescale');
+			scale.style.width= (horiscale-1)+'px';
+			$('seeker').appendChild(scale);
+		}
+		$('seeker').onmousedown=function(e)
+		{
+			e=e?e:event;
+			var px= e.clientX + $('wave').scrollLeft;
+			var tt= px / horiscale;
+			mysound.setTime(tt);
+			return true;
+		}
+	}
+
+	// anchor tools
+	$('delete').style.display='none';
+	$('delete').onclick=function()
+	{
+		if( dragging)
+		{
+			dragging.parentNode.removeChild(dragging);
+			dragging=null;
+		}
+	}
+	$('addlyrics').onclick=function()
+	{
+		if( $('ly-box').value)
+		{
+			add_lyrics(
+				{
+					x: parseInt(cursor.style.left),
+					y: 350
+				},
+				$('ly-box').value
+			);
+			$('ly-box').value='';
+		}
+	}
+	function add_lyrics(P,mess)
+	{
+		var lyr= anchor(P,'ly');
+		lyr.setAttribute('class','anchor lyrics');
+		lyr.innerHTML= mess;
+	}
+	function anchor(P,type)
+	{
+		var anc = document.createElement('div');
+		anc.setAttribute('class','anchor');
+		anc.style.left= round(P.x)+'px';
+		anc.style.top= round(P.y)+'px';
+		anc.onmousedown=function()
+		{
+			this.style.border= '1px solid #AFF';
+			dragging=this;
+			$('delete').style.display='';
+		}
+		$(type+'-holder').appendChild(anc);
+		return anc;
+	}
+	$('wave').onmousemove=function(e)
+	{
+		if( dragging)
+		{
+			e=e?e:event;
+			var px= e.clientX + $('wave').scrollLeft;
+			dragging.style.left= px+'px';
+		}
+	}
+	$('wave').onmouseup=function(e)
+	{
+		if( dragging)
+		{
+			dragging.style.border='';
+			dragging=null;
+			$('delete').style.display='none';
+		}
+	}
+
+	// keyboard controls
+	document.addEventListener("keydown", keydown, true);
+	function keydown(e)
+	{
+		if (!e) e = window.event;
+		if( document.activeElement !== $('ly-box'))
+		switch (keycode_to_keyname(e.keyCode))
+		{
+			case 'p':
+				$('pause').onclick.call($('pause'));
+			return true;
+
+			case 'l':
+				$('addlyrics').onclick();
+			return true;
+
+			case 'd':
+				$('delete').onclick();
+			return true;
+		}
+	}
+	function keycode_to_keyname(code)
+	{
+		if( (code>='A'.charCodeAt(0) && code<='Z'.charCodeAt(0)) ||
+			(code>='0'.charCodeAt(0) && code<='9'.charCodeAt(0)) )
+		{
+			return String.fromCharCode(code).toLowerCase();
+		}
+		return '';
+	}
+
+	// export
+	$('export').onclick=function()
+	{
+		var struct=
+		{
+			lyrics:[],
+			beat:[]
+		};
+		var content='';
+		var LYR = $('ly-holder').getElementsByClassName('anchor lyrics');
+		for( var i=0; i<LYR.length; i++)
+		{
+			var px= parseInt(LYR[i].style.left);
+			var tt= round(px / horiscale);
+			struct.lyrics.push({
+				t: tt,
+				v: LYR[i].innerHTML
+			});
+		}
+		content=JSON.stringify(struct,null,' ');
+		$('texter').value=content;
+		//
+		head.js('../third_party/FileSaver.js',
+				'../third_party/BlobBuilder.js',
+				function(){
+			var bb = new BlobBuilder;
+			bb.append(content);
+			var blob = bb.getBlob("text/plain;charset=utf-8");
+			saveAs(blob, 'out.js');
+		});
+	}
+
+	// import
+	$('import').onclick=function()
+	{
+		var struct=JSON.parse($('texter').value);
+		if( struct)
+		{
+			clear_div($('ly-holder'));
+			//
+			if( struct.lyrics)
+			for( var i=0; i<struct.lyrics.length; i++)
+			{
+				add_lyrics(
+					{
+						x: struct.lyrics[i].t * horiscale,
+						y: 350
+					},
+					struct.lyrics[i].v
+				);
+			}
+		}
+	}
+
+	// persist & default data
+	head.js('../third_party/persist-min.js',function()
+	{
+		store = new Persist.Store('celebrate-editor');
+		window.onbeforeunload = function()
+		{
+			store.set('data', $('texter').value);
+		}
+		store.get('data',
+		function(ok,value){
+			if(ok && value!='')
+			{
+				$('texter').value = value;
+				$('import').onclick();
+			}
+			else
+			{
+				head.js('../music/Jubilant-default.js',function()
+				{
+					$('import').onclick();
+				});
+			}
+		});
+	});
+
+	// helpers
+	function round(v,d)
+	{
+		if(d===undefined || d===null)
+			d=2;
+		var exp=1;
+		for( var i=0; i<d; i++)
+			exp*=10;
+		return Math.round(v*exp)/exp;
+	}
+	function $(id)
+	{
+		return document.getElementById(id);
+	}
+	function clear_div(el)
+	{
+		var parent = el.parentNode;
+		var id=el.getAttribute('id');
+		var cl=el.getAttribute('class');
+		el.parentNode.removeChild(el);
+		var hold = document.createElement('div');
+		hold.setAttribute('id',id);
+		hold.setAttribute('class',cl);
+		parent.appendChild(hold);
+	}
+
+}());
+</script>
 </body>
-</html>

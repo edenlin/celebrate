@@ -14,6 +14,7 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 			return This.hit(id);
 		}
 		//
+		drumsetel.setAttribute('class','drumset');
 		var DRU = drumsetel.getElementsByTagName('div');
 		for( var i=0; i<DRU.length; i++)
 		{

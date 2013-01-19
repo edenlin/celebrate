@@ -78253,5 +78253,4 @@ data=
  "channels": 2,
  "sampleRate": 44100,
  "frameBufferLength": 2048
-}
-;
+};
