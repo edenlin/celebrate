@@ -1,29 +1,30 @@
 define(['F.core/css!celebrate/src/drum.css','third_party/buzz','F.core/effects-pool'],
 function(dumpcss,dumpbuzz,Feffects_pool)
 {
-	function drumset( drumsetel )
+	function drumset( drumsetel, onhit )
 	{
 		var This=this;
+		this.onhit=onhit;
 		this.set={};
-		//
-		document.addEventListener("keydown", keydown, true);
-		function keydown(e)
+		this.key=
 		{
-			if (!e) e = window.event;
-			var id= 'd'+keycode_to_keyname(e.keyCode);
-			return This.hit(id);
-		}
+			//'key':'id'
+		};
 		//
 		drumsetel.setAttribute('class','drumset');
 		var DRU = drumsetel.getElementsByTagName('div');
 		for( var i=0; i<DRU.length; i++)
 		{
 			var drum=DRU[i];
+			var key = drum.getAttribute('key');
+			var vol = drum.getAttribute('vol');
 			var sound = drum.getAttribute('sound');
 			var radius = drum.getAttribute('radius');
 			var color = drum.getAttribute('color');
 			var img = drum.getAttribute('img');
-			var vol = drum.getAttribute('vol');
+			//
+			if( key)
+				this.key[key]=drum.id;
 			if( vol)
 				vol = parseInt(vol);
 			if( sound)
@@ -61,7 +62,19 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 			{
 				var im = document.createElement('img');
 				im.src = img;
+				im.setAttribute('class','drumimg');
 				drum.appendChild(im);
+			}
+		}
+		//
+		if( !isEmpty(this.key))
+		{
+			document.addEventListener("keydown", keydown, true);
+			function keydown(e)
+			{
+				if (!e) e = window.event;
+				var key = keycode_to_keyname(e.keyCode);
+				return This.hit(This.key[key]);
 			}
 		}
 	}
@@ -70,6 +83,8 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 		if( this.set[id])
 		{
 			this.set[id].create();
+			if( this.onhit)
+				this.onhit(id);
 			return true;
 		}
 	}
@@ -82,6 +97,13 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 	}
 	function drumplet(sound,vol)
 	{
+		var has_extension=false;
+		if( sound.indexOf('.mp3')!==-1 ||
+			sound.indexOf('.ogg')!==-1 ||
+			sound.indexOf('.wav')!==-1 )
+			has_extension=true;
+		buzz_config.formats= has_extension ? null:['mp3','ogg'];
+		//
 		var This=this;
 		this.sound = new buzz.sound( '../sound/'+sound, buzz_config);
 		if( vol && vol>=0 && vol<=100)
@@ -104,6 +126,15 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 			return String.fromCharCode(code).toLowerCase();
 		}
 		return '';
+	}
+	function isEmpty(obj)
+	{
+		for(var prop in obj)
+		{
+		    if(obj.hasOwnProperty(prop))
+		        return false;
+		}
+		return true;
 	}
 
 	return drumset;

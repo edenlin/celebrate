@@ -6,30 +6,28 @@ requirejs.config({
 	}
 });
 
-requirejs(['cele/musician'],function(Musi)
+requirejs(['cele/musician','cele/drum'],function(Mgroup,Drum)
 {
-	var musi=[];
-
+	var musi={};
 	var GROUP = $('musicians').getElementsByClassName('group');
 	for( var i=0; i<GROUP.length; i++)
 	{	//for each group
-		var DIV = GROUP[i].getElementsByTagName('div');
-		for( var j=0; j<DIV.length; j++)
-		{	//for each div
-			var div = DIV[j];
-			var spid = div.getAttribute('sprite');
-			if( spid)
-			{
-				musi.push( new Musi(div,spid));
-			}
-		}
+		var group=GROUP[i];
+		musi[group.id]= new Mgroup(group);
+	}
+
+	var drumset = new Drum($('musicians'), onhit);
+
+	function onhit(id)
+	{
+		if( musi[id])
+			musi[id].onhit();
 	}
 
 	setInterval(frame,1000/10);
-
 	function frame()
 	{
-		for( var i=0; i<musi.length; i++)
+		for( var i in musi)
 			musi[i].frame();
 
 		//calculate fps
