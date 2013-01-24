@@ -5,11 +5,14 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 	{
 		var This=this;
 		this.onhit=onhit;
-		this.set={};
+		this.set=
+		{
+			//id: effects_pool
+		}
 		this.key=
 		{
-			//'key':'id'
-		};
+			//key: id
+		}
 		//
 		drumsetel.setAttribute('class','drumset');
 		var DRU = drumsetel.getElementsByTagName('div');
@@ -69,13 +72,13 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 		//
 		if( !isEmpty(this.key))
 		{
-			document.addEventListener("keydown", keydown, true);
 			function keydown(e)
 			{
 				if (!e) e = window.event;
-				var key = keycode_to_keyname(e.keyCode);
+				var key = String.fromCharCode(e.keyCode).toLowerCase();
 				return This.hit(This.key[key]);
 			}
+			document.addEventListener("keydown", keydown, true);
 		}
 	}
 	drumset.prototype.hit=function(id)
@@ -118,15 +121,6 @@ function(dumpcss,dumpbuzz,Feffects_pool)
 		this.sound.play();
 	}
 	//
-	function keycode_to_keyname(code)
-	{
-		if( (code>='A'.charCodeAt(0) && code<='Z'.charCodeAt(0)) ||
-			(code>='0'.charCodeAt(0) && code<='9'.charCodeAt(0)) )
-		{
-			return String.fromCharCode(code).toLowerCase();
-		}
-		return '';
-	}
 	function isEmpty(obj)
 	{
 		for(var prop in obj)

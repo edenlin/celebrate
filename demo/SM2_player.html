@@ -1,0 +1,39 @@
+<body>
+Player - demo of audio playback using <a href='http://www.schillmania.com/projects/soundmanager2' target='_blank'>Sound Manager 2 (SM2)</a><br>
+SM2 play sounds via a Flash backend, which according to my experimentation is more robust than HTML5 audio.<br>
+<div id='timer'>not loaded</div>
+<script src='../third_party/soundmanager2-nodebug-jsmin.js'></script>
+<script>
+soundManager.setup(
+{
+	url: '../third_party/',
+	debugMode: false,
+	debugFlash: false,
+	flashVersion: 9,
+	flashPollingInterval: 1000/30,
+	preferFlash: true,
+	useHighPerformance: true,
+	useHTML5Audio: true,
+	defaultOptions:
+	{
+		autoLoad: true,
+		autoPlay: false,
+		multiShot: true,
+		multiShotEvents: true
+	}
+});
+
+soundManager.onready(function()
+{
+	soundManager.createSound(
+	{
+		id: 'mysound',
+		url: '../music/Jubilant.mp3',
+		whileplaying: function()
+		{
+			document.getElementById('timer').innerHTML = this.position;
+		}
+	}).play();
+});
+</script>
+</body>

@@ -1,16 +1,19 @@
 <body>
 Analyzer - extract audio samples at a lower sampling rate<br>
-This demo utilizes Mozilla only audio data API, and should work in Firefox 4~18<br>
-Play the music, and after the music have been finished, click export,<br>
- then a file save dialog should appear to save the samples into a js file.<br>
- if nothing appears, you can at least copy and save data from the following text box.<br>
 <audio id="mysound"
            src="../music/Jubilant.ogg"
            controls="true"
            style="width: 512px;">
-</audio>
-<button id='export'>export</button>
-<br>
+</audio><br>
+This demo utilizes Mozilla only audio data API, and should work in Firefox 4~18.<br>
+Enter a sound file path in the input box and click load. Note that under 'same domain policy'<br>
+ you may not be able to analyse the file. See notes for a work around.<br>
+Play the music, and after the music have been finished, click export,<br>
+ then a file save dialog should appear to save the samples into a js file.<br>
+ if nothing appears, you can at least copy and save data from the following text box.<br>
+<input id='filepath'></input>
+<button id='load'>load</button>
+<button id='export'>export</button><br>
 <textarea id='data' style='width: 512px; height: 400px;'>no data</textarea>
 
 <script src='../third_party/FileSaver.js'></script>
@@ -71,6 +74,12 @@ $('export').onclick=function()
 	saveAs(blob, 'out.js');
 
 	data.value=string;
+}
+
+$('load').onclick=function()
+{
+	if( $('filepath').value)
+		audio.src= $('filepath').value;
 }
 
 function round(v,d)

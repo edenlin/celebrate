@@ -8,20 +8,41 @@
 	border-left: 1px solid #66F;
 	width: 0px;
 }
-.anchor
+.beat
 {
 	position: absolute;
-	width: 5px;
+	width: 0px;
 	height: 40px;
 	cursor: w-resize;
 }
+.brass
+{
+	border-left: 1px solid #D8B300;
+}
+.drum
+{
+	border-left: 1px solid #7E3227;
+}
+.selected .brass
+{
+	border-left: 1px solid #D8B300;
+	border-right: 1px solid #FF7864;
+}
+.selected .drum
+{
+	border-left: 1px solid #7E3227;
+	border-right: 1px solid #FF7864;
+}
 .lyrics
 {
+	position: absolute;
 	width: auto;
+	height: 40px;
 	color: #FFF;
 	background-color: #668;
 	font-size: 20px;
 	white-space: nowrap;
+	cursor: w-resize;
 }
 #wave
 {
@@ -106,6 +127,31 @@
 {
 	position: relative;
 }
+.layer
+{
+	position: relative;
+	border-top: 1px solid black;
+	width: 100%;
+	height: 25px;
+	font-size: 14px;
+}
+#layers
+{
+	position: relative;
+}
+.activearea
+{
+	position: absolute;
+	background-color: #AAF;
+	top: 0px;
+	height: 100%;
+	z-index: -1;
+}
+#cursor2
+{
+	border-left: 1px solid #F66;
+	z-index: 1;
+}
 </style>
 </head>
 
@@ -113,9 +159,9 @@
 
 <div id='wave'>
 	<div id='seeker'></div>
-	<div id='bt-holder'></div>
-	<div id='ly-holder'></div>
 	<div id='waveform'></div>
+	<div id='ly-holder'></div>
+	<div id='bt-holder'></div>
 </div>
 
 <div id='toolbar'>
@@ -124,6 +170,25 @@
 		<div class='dialog'>
 			<button id='pause' class='tool'></button>
 			<div id='timer' class='tool'>nan</div>
+			<div class='tool' style='width:20px;'></div>
+			<button id='record' class='tool'>record</button>
+		</div>
+
+		<br>
+		<div class='dialog'>
+			<span class='tool'>Layers</span>
+			<div class='tool' style='width:20px;'></div>
+			<button id='deletelayer' class='tool'>delete layer</button>
+			<button id='mergedown' class='tool'>merge down</button>
+			<br>
+			<div id='layers'>
+				<!--
+				<div class='layer'>
+					<input type='checkbox'/>
+					<div class='activearea'></div>
+				</div>
+				-->
+			</div>
 		</div>
 
 		<br>
@@ -178,10 +243,12 @@
 
 	<div class='panel'>
 		<div class='dialog'>
-			<button id='addlyrics' class='tool'>[L] add lyrics</button>
+			<button id='addlyrics' class='tool'>add lyrics</button>
 			<input id='ly-box' class='tool' value="lyrics here"/>
 			<button id='delete' class='tool'>[D] delete</button>
-			<br>
+		</div>
+
+		<div class='dialog'>
 			<button id='openmusic' class='tool'>open music</button>
 			<div id='openform'>
 				<br>
@@ -190,7 +257,7 @@
 				HD: <input id='openform-hd' type='checkbox' />
 			</div>
 			<div class='tool' style='width:20px;'></div>
-			data:
+			<span class='tool'>data:</span>
 			<button id='import' class='tool'>import</button>
 			<button id='export' class='tool'>export</button>
 			<textarea id='texter' class='tool'>
@@ -207,12 +274,29 @@
 	//set up
 	var height=410;
 	var horiscale=120;
-	var lasttime=0;
+	//
 	var mysound;
+	var lasttime=0;
+	var paused=true;
+	//
+	var drumset;
+	//
 	var dragging=null;
+	//
 	var store;
+	//
 	var cursor;
+	var cursor2;
 	var cursor_timer;
+	//
+	var record=
+	{
+		layer:0,
+		ing:false,
+		activearea:null
+	}
+	var layercount=0;
+	var layerselected=[];
 
 	// load waveform file
 	load_waveform('../music/Jubilant-sample.js');
@@ -239,8 +323,8 @@
 		requirejs(['cele/drum'],
 		function(Drum)
 		{
-			var drumset = new Drum($('drumset'));
-			// buzz is required by drum
+			drumset = new Drum($('drumset'),ondrum);
+			// buzz is already required by drum
 			load_sound('../music/Jubilant');
 		});
 	});
@@ -272,6 +356,11 @@
 				$('wave').scrollLeft=1;
 			$('timer').innerHTML=t;
 			//
+			if( record.ing)
+				record.activearea.style.width= current_percent()-parseInt(record.activearea.style.left)+'%';
+			cursor2.style.left= current_percent()+'%';
+			playback();
+			//
 			lasttime=new Date().getTime();
 		})
 		.bind('loadedmetadata', function()
@@ -281,20 +370,19 @@
 	}
 
 	// load others
-	$('openform').style.display='none';
+	hide($('openform'));
 	$('openmusic').onclick=function()
 	{
 		if( this.innerHTML==='open music')
 		{
 			this.innerHTML='load';
-			$('openform').style.display='';
+			show($('openform'));
 		}
 		else
 		{
 			this.innerHTML='open music';
-			$('openform').style.display='none';
+			hide($('openform'));
 			clear_div($('seeker'));
-			clear_div($('bt-holder'));
 			clear_div($('ly-holder'));
 			clear_div($('waveform'));
 			load_sound($('openform-music').value);
@@ -315,8 +403,7 @@
 	}
 	function value(sam)
 	{
-		var bar = document.createElement('div');
-		bar.setAttribute('class','bar');
+		var bar = create_element('div',null,'bar');
 		var V= sam.v>0 ? sam.v:-sam.v;
 		bar.style.height=(V*2+'px');
 		bar.style.top=(height/2-V)+'px';
@@ -333,6 +420,12 @@
 		cursor.style.top='0px';
 		cursor.style.left='0px';
 		cursor.style.height=height+'px';
+		if( !cursor2)
+		{
+			// <div class='activearea'></div>
+			cursor2= create_element('div','cursor2','activearea');
+			$('layers').appendChild(cursor2);
+		}
 	}
 	cursor_timer = setInterval(function()
 	{
@@ -340,25 +433,31 @@
 		if( mysound)
 		if( !mysound.isPaused())
 		{
-			var x=parseInt(cursor.style.left);
+			var x=current_time();
 			x += (curtime-lasttime)*horiscale/1000;
 			cursor.style.left=round(x)+'px';
+			playback();
 		}
 		lasttime=curtime;
 	}, 1000/20);
 
 	// seeker controls
+	paused=true;
 	$('pause').innerHTML='[p] play';
 	$('pause').onclick=function()
 	{
 		if( this.innerHTML==='[p] pause')
 		{
 			mysound.pause();
+			paused=true;
 			this.innerHTML='[p] play';
+			if( record.ing)
+				$('record').onclick();
 		}
 		else
 		{
 			mysound.play();
+			paused=false;
 			this.innerHTML='[p] pause';
 		}
 	}
@@ -367,30 +466,34 @@
 		$('seeker').style.width= mysound.getDuration() * horiscale+'px';
 		for( var i=0, lim=round(mysound.getDuration(),0); i<lim; i++)
 		{
-			var scale= document.createElement('div');
-			scale.innerHTML= i;
-			scale.setAttribute('class','timescale');
+			var scale= create_element('div',null,'timescale',i);
 			scale.style.width= (horiscale-1)+'px';
 			$('seeker').appendChild(scale);
 		}
 		$('seeker').onmousedown=function(e)
 		{
+			if( record.ing) //cant seek when recording
+				return false;
+
 			e=e?e:event;
 			var px= e.clientX + $('wave').scrollLeft;
 			var tt= px / horiscale;
 			mysound.setTime(tt);
+			cursor.style.left=px+'px';
+			playback_map();
 			return true;
 		}
 	}
 
 	// anchor tools
-	$('delete').style.display='none';
+	hide($('delete'));
 	$('delete').onclick=function()
 	{
 		if( dragging)
 		{
 			dragging.parentNode.removeChild(dragging);
 			dragging=null;
+			hide(this);
 		}
 	}
 	$('addlyrics').onclick=function()
@@ -399,7 +502,7 @@
 		{
 			add_lyrics(
 				{
-					x: parseInt(cursor.style.left),
+					x: current_time(),
 					y: 350
 				},
 				$('ly-box').value
@@ -409,23 +512,20 @@
 	}
 	function add_lyrics(P,mess)
 	{
-		var lyr= anchor(P,'ly');
-		lyr.setAttribute('class','anchor lyrics');
-		lyr.innerHTML= mess;
+		anchor(P, 'lyrics', mess, $('ly-holder'));
 	}
-	function anchor(P,type)
+	function anchor(P, cclass, content, appendto)
 	{
-		var anc = document.createElement('div');
-		anc.setAttribute('class','anchor');
+		var anc = create_element('div',null,cclass,content);
 		anc.style.left= round(P.x)+'px';
 		anc.style.top= round(P.y)+'px';
 		anc.onmousedown=function()
 		{
 			this.style.border= '1px solid #AFF';
 			dragging=this;
-			$('delete').style.display='';
+			show($('delete'));
 		}
-		$(type+'-holder').appendChild(anc);
+		appendto.appendChild(anc);
 		return anc;
 	}
 	$('wave').onmousemove=function(e)
@@ -443,7 +543,7 @@
 		{
 			dragging.style.border='';
 			dragging=null;
-			$('delete').style.display='none';
+			hide($('delete'));
 		}
 	}
 
@@ -458,11 +558,6 @@
 			case 'p':
 				$('pause').onclick.call($('pause'));
 			return true;
-
-			case 'l':
-				$('addlyrics').onclick();
-			return true;
-
 			case 'd':
 				$('delete').onclick();
 			return true;
@@ -478,37 +573,241 @@
 		return '';
 	}
 
-	// export
-	$('export').onclick=function()
+	// record
+	hide($('deletelayer'));
+	hide($('mergedown'));
+	$('deletelayer').onclick=function()
 	{
-		var struct=
+		for( var i=0; i<layerselected.length; i++)
 		{
-			lyrics:[],
-			beat:[]
-		};
-		var content='';
-		var LYR = $('ly-holder').getElementsByClassName('anchor lyrics');
-		for( var i=0; i<LYR.length; i++)
-		{
-			var px= parseInt(LYR[i].style.left);
-			var tt= round(px / horiscale);
-			struct.lyrics.push({
-				t: tt,
-				v: LYR[i].innerHTML
-			});
+			var bt= $('bt-layer'+layerselected[i]);
+			var la= $('layer'+layerselected[i]);
+			bt.parentNode.removeChild(bt);
+			la.parentNode.removeChild(la);
+			layercount-=1;
 		}
-		content=JSON.stringify(struct,null,' ');
-		$('texter').value=content;
-		//
-		head.js('../third_party/FileSaver.js',
-				'../third_party/BlobBuilder.js',
-				function(){
+		layerselected=[];
+		hide($('deletelayer'));
+	}
+	$('record').onclick=function()
+	{
+		if( this.innerHTML==='record')
+		{	//start recording
+			if( paused)
+				$('pause').onclick();
+			this.innerHTML='recording';
+			this.style.backgroundColor= '#FAA';
+			layercount+=1;
+			record.ing=true;
+			record.layer=layercount;
+			// create layer in layer list
+			var la = create_element('div', 'layer'+layercount, 'layer', 'layer'+layercount);
+			// <input type='checkbox'>
+			var ck = create_element('input');
+			ck.setAttribute('type','checkbox');
+			ck.onchange=function()
+			{
+				layer_toggle(this.checked, this.parentNode.id);
+			}
+			la.appendChild(ck);
+			// <div class='activearea'></div>
+			var aa = create_element('div', null, 'activearea');
+			aa.style.left= current_percent()+'%';
+			aa.style.width= '1%';
+			record.activearea = aa;
+			la.appendChild(aa);
+			//
+			$('layers').appendChild(la);
+			// create layer in waveform
+			var bt = create_element( 'div', 'bt-layer'+layercount);
+			$('bt-holder').appendChild(bt);
+		}
+		else
+		{	//stop recording
+			if( !paused)
+				$('pause').onclick();
+			var bound= layer_bound($('bt-layer'+record.layer));
+			if( bound)
+			{
+				record.activearea.style.left= wave_to_percent(bound.start)+'%';
+				record.activearea.style.width= wave_to_percent(bound.end-bound.start)+'%';
+			}
+			this.innerHTML='record';
+			this.style.backgroundColor= '';
+			record.ing=false;
+		}
+	}
+	function ondrum(id)
+	{
+		if( record.ing && !paused)
+		{
+			var bt = anchor({ x: current_time(),
+							  y: 50*(1+record.layer%5) },
+							'beat'+' '+drumtype(id),
+							'',
+							$('bt-layer'+record.layer));
+			bt.setAttribute('sid',id);
+		}
+	}
+	function drumtype(id)
+	{
+		switch(id)
+		{
+			case 'd3': case 'd4': case 'd5': case 'd6': case 'd7': 
+			case 'df': case 'dv': 
+			return 'brass';
+			case 'dr': case 'dt': case 'dy': case 'du':
+			case 'db': case 'dg': case 'dn':
+			return 'drum';
+		}
+		return '';
+	}
+	function layer_toggle(yes,id)
+	{
+		var num=parseInt(id.slice(5));
+		if( yes)
+		{
+			$('bt-'+id).setAttribute('class','selected');
+			layerselected.push(num);
+		}
+		else
+		{
+			$('bt-'+id).setAttribute('class','');
+			layerselected=layerselected.exclude(num);
+		}
+		if( layerselected.length>0)
+		{
+			show($('deletelayer'));
+		}
+		else
+		{
+			hide($('deletelayer'));
+		}
+	}
+	function layer_bound(lay)
+	{
+		var start=lay.firstChild;
+		var end  =lay.lastChild;
+		if( !start)
+			return null;
+		return {
+			start: parseInt(start.style.left),
+			end: parseInt(end.style.left)
+		}
+	}
+	function current_percent()
+	{
+		return round(wave_to_percent(current_time()));
+	}
+	function current_time()
+	{
+		return parseInt(cursor.style.left);
+	}
+	function wave_to_percent(tt)
+	{
+		return tt/parseInt($('seeker').style.width)*100;
+	}
+	function time_of(K)
+	{
+		return parseInt(K.style.left);
+	}
+
+	// simulated playback
+	function playback_map()
+	{
+		var time = current_time();
+		var LAY = $('bt-holder').children;
+		if( LAY)
+		for( var i=0; i<LAY.length; i++)
+		{
+			var bound=layer_bound(LAY[i]);
+			if( time<bound.start)
+			{
+				LAY[i].setAttribute('cursor',0);
+			}
+			else if( time>bound.end)
+			{
+				LAY[i].setAttribute('cursor',-1);
+			}
+			else if( time>=bound.start && time<=bound.end)
+			{
+				for( var j=0, jlen=LAY[i].children.length; j<jlen; j++)
+				{
+					if( time < time_of(LAY[i].children[j]))
+						break;
+				}
+				LAY[i].setAttribute('cursor',j);
+			}
+		}
+	}
+	function playback()
+	{
+		var time = current_time();
+		var LAY = $('bt-holder').children;
+		if( LAY)
+		for( var i=0; i<LAY.length; i++)
+		{
+			var cc = LAY[i].getAttribute('cursor');
+			if( !LAY[i].children || cc===undefined || cc===null)
+				continue;
+			cc = parseInt(cc);
+			if( cc===-1)
+				continue;
+			for( var j=cc, len=LAY[i].children.length; j<len; j++)
+			{
+				if( time < time_of(LAY[i].children[j]))
+					break;
+			}
+			if( j>cc)
+			{
+				LAY[i].setAttribute('cursor',j);
+				for( var k=cc; k<j; k++)
+				{
+					beatup(LAY[i].children[k]);
+				}
+			}
+		}
+	}
+	function beatup(bt)
+	{
+		var sid = bt.getAttribute('sid');
+		drumset.hit(sid);
+	}
+
+	// export
+	head.js('../third_party/FileSaver.js',
+			'../third_party/BlobBuilder.js',
+			'../third_party/sugar-1.3.8-custom.min.js',
+	function()
+	{
+		$('export').onclick=function()
+		{
+			var struct=
+			{
+				lyrics:[],
+				beat:[]
+			};
+			var content='';
+			var LYR = $('ly-holder').getElementsByClassName('lyrics');
+			for( var i=0; i<LYR.length; i++)
+			{
+				var px= parseInt(LYR[i].style.left);
+				var tt= round(px / horiscale);
+				struct.lyrics.push({
+					t: tt,
+					v: LYR[i].innerHTML
+				});
+			}
+			struct.lyrics= struct.lyrics.sortBy('t');
+			content=JSON.stringify(struct,null,' ');
+			$('texter').value=content;
+			//
 			var bb = new BlobBuilder;
 			bb.append(content);
 			var blob = bb.getBlob("text/plain;charset=utf-8");
 			saveAs(blob, 'out.js');
-		});
-	}
+		}
+	});
 
 	// import
 	$('import').onclick=function()
@@ -577,10 +876,42 @@
 		var id=el.getAttribute('id');
 		var cl=el.getAttribute('class');
 		el.parentNode.removeChild(el);
-		var hold = document.createElement('div');
-		hold.setAttribute('id',id);
-		hold.setAttribute('class',cl);
+		var hold = create_element('div',id,cl);
 		parent.appendChild(hold);
+	}
+	function show(el)
+	{
+		el.style.display='';
+	}
+	function hide(el)
+	{
+		el.style.display='none';
+	}
+	function create_element(tag,id,cclass,innerHTML)
+	{
+		var el = document.createElement(tag);
+		if( id)
+			el.id=id;
+		if( cclass)
+			el.setAttribute('class',cclass);
+		if( innerHTML)
+			el.innerHTML= innerHTML;
+		return el;
+	}
+	function min_max(arr,ranker,max)
+	{
+		var index=0;
+		var rank=ranker(arr[0]);
+		for( var i=0; i<arr.length; i++)
+		{
+			var irank = ranker(arr[i]);
+			if( irank > rank === max)
+			{
+				index=i;
+				rank=irank;
+			}
+		}
+		return index;
 	}
 
 }());
