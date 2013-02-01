@@ -6,7 +6,7 @@ requirejs.config({
 	}
 });
 
-requirejs(['cele/musician','cele/drum'],function(Mgroup,Drum)
+requirejs(['cele/musician','cele/drumset'],function(Mgroup,Drumset)
 {
 	var musi={};
 	var GROUP = $('musicians').getElementsByClassName('group');
@@ -16,7 +16,11 @@ requirejs(['cele/musician','cele/drum'],function(Mgroup,Drum)
 		musi[group.id]= new Mgroup(group);
 	}
 
-	var drumset = new Drum($('musicians'), onhit);
+	var drumset = new Drumset($('musicians'),
+		{
+			baseurl:'../sound/',
+			onhit:onhit
+		});
 
 	function onhit(id)
 	{

@@ -59,9 +59,9 @@ requirejs.config({
 	}
 });
 requirejs(['cele/drumset'],
-function(Drumset)
+function(Drum)
 {
-	var drumset = new Drumset($('drumset'), {baseurl:'../sound/'});
+	var drumset = new Drum($('drumset'), {baseurl:'../sound/'});
 	//
 	function $(id)
 	{

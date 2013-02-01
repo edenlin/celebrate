@@ -1,4 +1,5 @@
 <body>
+<meta http-equiv='content-type' content='text/html; charset=UTF-8'>
 Analyzer - extract audio samples at a lower sampling rate<br>
 <audio id="mysound"
            src="../music/Jubilant.ogg"
@@ -11,6 +12,7 @@ Enter a sound file path in the input box and click load. Note that under 'same d
 Play the music, and after the music have been finished, click export,<br>
  then a file save dialog should appear to save the samples into a js file.<br>
  if nothing appears, you can at least copy and save data from the following text box.<br>
+<!-- http://www.schillmania.com/projects/soundmanager2/demo/_mp3/rain.mp3 -->
 <input id='filepath'></input>
 <button id='load'>load</button>
 <button id='export'>export</button><br>
@@ -55,14 +57,18 @@ function audioAvailable(event)
 		signal[i] = (fb[2*i] + fb[2*i+1]) / 2;
 	}
 
-	dump.data.push({
-		t:round(t,4),
-		v:round(256*signal[0])
-	});
-	dump.data.push({
-		t:round(t+0.5*signal.length/rate,4),
-		v:round(256*signal[round(0.5*signal.length)])
-	});
+	if( t-this.lastt > 0.02 || this.lastt===undefined)
+	{
+		dump.data.push({
+			t:round(t,4),
+			v:round(256*signal[0])
+		});
+		dump.data.push({
+			t:round(t+0.5*signal.length/rate,4),
+			v:round(256*signal[round(0.5*signal.length)])
+		});
+		this.lastt=t;
+	}
 }
 
 $('export').onclick=function()

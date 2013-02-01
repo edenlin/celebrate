@@ -1,6 +1,9 @@
 <body>
 Player - demo of audio playback using <a href='http://www.schillmania.com/projects/soundmanager2' target='_blank'>Sound Manager 2 (SM2)</a><br>
 SM2 play sounds via a Flash backend, which according to my experimentation is more robust than HTML5 audio.<br>
+This example will probably not work on a local filesystem unless you add this directory into the trusted location list in 
+<a href='http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html' target='_blank'>
+Flash global security settings panel</a>.<br>
 <div id='timer'>not loaded</div>
 <script src='../third_party/soundmanager2-nodebug-jsmin.js'></script>
 <script>
@@ -13,7 +16,7 @@ soundManager.setup(
 	flashPollingInterval: 1000/30,
 	preferFlash: true,
 	useHighPerformance: true,
-	useHTML5Audio: true,
+	useHTML5Audio: false,
 	defaultOptions:
 	{
 		autoLoad: true,

@@ -1,6 +1,7 @@
 <head>
 <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
 <script src='../third_party/head.load.min.js'></script>
+<script src='../third_party/require.js'></script>
 <style>
 .bar
 {
@@ -11,7 +12,7 @@
 .beat
 {
 	position: absolute;
-	width: 0px;
+	width: 2px;
 	height: 40px;
 	cursor: w-resize;
 }
@@ -32,6 +33,10 @@
 {
 	border-left: 1px solid #7E3227;
 	border-right: 1px solid #FF7864;
+}
+.selected .beat
+{
+	width: 0px;
 }
 .lyrics
 {
@@ -183,7 +188,8 @@
 			<br>
 			<div id='layers'>
 				<!--
-				<div class='layer'>
+				<div id='layer1' class='layer'>
+					layer1
 					<input type='checkbox'/>
 					<div class='activearea'></div>
 				</div>
@@ -269,7 +275,15 @@
 
 
 <script>
-(function()
+requirejs.config({
+	baseUrl: '../../',
+	paths: {
+		'cele':'celebrate/src',
+		'third_party':'celebrate/third_party'
+	}
+});
+
+requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 {
 	//set up
 	var height=410;
@@ -277,9 +291,7 @@
 	//
 	var mysound;
 	var lasttime=0;
-	var paused=true;
-	//
-	var drumset;
+	var paused;
 	//
 	var dragging=null;
 	//
@@ -297,6 +309,14 @@
 	}
 	var layercount=0;
 	var layerselected=[];
+	//
+	var isbuzz=(typeof buzz!=='undefined');
+	var isSM2=(typeof soundManager!=='undefined');
+	var drumset=new Drumset($('drumset'),
+		{
+			baseurl:'../sound/',
+			onhit: ondrum
+		});
 
 	// load waveform file
 	load_waveform('../music/Jubilant-sample.js');
@@ -310,63 +330,42 @@
 	}
 
 	// load sound
-	head.js('../third_party/require.js',function()
+	create_sound.ready(function()
 	{
-		requirejs.config({
-			baseUrl: '../../',
-			paths: {
-				'cele':'celebrate/src',
-				'third_party':'celebrate/third_party'
-			}
-		});
-		//
-		requirejs(['cele/drum'],
-		function(Drum)
-		{
-			drumset = new Drum($('drumset'),ondrum);
-			// buzz is already required by drum
-			load_sound('../music/Jubilant');
-		});
+		load_sound('../music/Jubilant');
 	});
 	function load_sound(filepath)
 	{
-		var has_extension=false;
-		if( filepath.indexOf('.mp3')!==-1 ||
-		    filepath.indexOf('.ogg')!==-1 ||
-		    filepath.indexOf('.wav')!==-1 )
-			has_extension=true;
-
-		mysound = new buzz.sound( filepath,
-		{
-			formats: has_extension ? null:['mp3','ogg'],
-			preload: true,
-			autoplay: false,
-			loop: false
-		});
-		mysound
-		.bind('timeupdate', function(e)
-		{
-			var t=this.getTime();
-			//
-			cursor.style.left=round(t*horiscale)+'px';
-			var diff= t*horiscale - $('wave').scrollLeft;
-			if( diff>900 || diff<0)
-				$('wave').scrollLeft=round(t*horiscale-50);
-			if( t<1)
-				$('wave').scrollLeft=1;
-			$('timer').innerHTML=t;
-			//
-			if( record.ing)
-				record.activearea.style.width= current_percent()-parseInt(record.activearea.style.left)+'%';
-			cursor2.style.left= current_percent()+'%';
-			playback();
-			//
-			lasttime=new Date().getTime();
-		})
-		.bind('loadedmetadata', function()
-		{
-			create_timescale();
-		});
+		mysound = create_sound(filepath,
+			{
+				onload: function()
+				{
+					create_timescale();
+					if( layercount>0) //initial layers
+					{
+						apply_bound(1);
+						playback_map();
+					}
+				},
+				timeupdate: timeupdate
+			});
+	}
+	function timeupdate(t)
+	{
+		cursor.style.left=round(t*horiscale)+'px';
+		var diff= t*horiscale - $('wave').scrollLeft;
+		if( diff>900 || diff<0)
+			$('wave').scrollLeft=round(t*horiscale-50);
+		if( t<1)
+			$('wave').scrollLeft=1;
+		$('timer').innerHTML=t;
+		//
+		if( record.ing)
+			record.activearea.style.width= current_percent()-parseInt(record.activearea.style.left)+'%';
+		cursor2.style.left= current_percent()+'%';
+		playback();
+		//
+		lasttime=new Date().getTime();
 	}
 
 	// load others
@@ -420,6 +419,7 @@
 		cursor.style.top='0px';
 		cursor.style.left='0px';
 		cursor.style.height=height+'px';
+		cursor.style.zIndex=2;
 		if( !cursor2)
 		{
 			// <div class='activearea'></div>
@@ -427,19 +427,21 @@
 			$('layers').appendChild(cursor2);
 		}
 	}
-	cursor_timer = setInterval(function()
-	{
-		var curtime = new Date().getTime();
-		if( mysound)
-		if( !mysound.isPaused())
+	if( isbuzz)
+	{	//HTML5 audio appears to have a less precise timeupdate event
+		cursor_timer = setInterval(function()
 		{
-			var x=current_time();
-			x += (curtime-lasttime)*horiscale/1000;
-			cursor.style.left=round(x)+'px';
-			playback();
-		}
-		lasttime=curtime;
-	}, 1000/20);
+			var curtime = new Date().getTime();
+			if( !paused)
+			{
+				var x=current_time();
+				x += (curtime-lasttime)*horiscale/1000;
+				cursor.style.left=round(x)+'px';
+				playback();
+			}
+			lasttime=curtime;
+		}, 1000/20);
+	}
 
 	// seeker controls
 	paused=true;
@@ -597,49 +599,54 @@
 				$('pause').onclick();
 			this.innerHTML='recording';
 			this.style.backgroundColor= '#FAA';
-			layercount+=1;
 			record.ing=true;
-			record.layer=layercount;
-			// create layer in layer list
-			var la = create_element('div', 'layer'+layercount, 'layer', 'layer'+layercount);
-			// <input type='checkbox'>
-			var ck = create_element('input');
-			ck.setAttribute('type','checkbox');
-			ck.onchange=function()
-			{
-				layer_toggle(this.checked, this.parentNode.id);
-			}
-			la.appendChild(ck);
-			// <div class='activearea'></div>
-			var aa = create_element('div', null, 'activearea');
-			aa.style.left= current_percent()+'%';
-			aa.style.width= '1%';
-			record.activearea = aa;
-			la.appendChild(aa);
-			//
-			$('layers').appendChild(la);
-			// create layer in waveform
-			var bt = create_element( 'div', 'bt-layer'+layercount);
-			$('bt-holder').appendChild(bt);
+			record.layer= create_layer();
 		}
 		else
 		{	//stop recording
 			if( !paused)
 				$('pause').onclick();
-			var bound= layer_bound($('bt-layer'+record.layer));
-			if( bound)
-			{
-				record.activearea.style.left= wave_to_percent(bound.start)+'%';
-				record.activearea.style.width= wave_to_percent(bound.end-bound.start)+'%';
-			}
+			apply_bound(record.layer);
 			this.innerHTML='record';
 			this.style.backgroundColor= '';
 			record.ing=false;
 		}
 	}
-	function ondrum(id)
+	function create_layer()
 	{
-		if( record.ing && !paused)
+		layercount+=1;
+		// create layer in layer list
+		// <div id='layer1' class='layer'>layer1</div>
+		var la = create_element('div', 'layer'+layercount, 'layer', 'layer'+layercount);
+		// <input type='checkbox'>
+		var ck = create_element('input');
+		ck.setAttribute('type','checkbox');
+		ck.onchange=function()
+		{
+			layer_toggle(this.checked, this.parentNode.id);
+		}
+		la.appendChild(ck);
+		// <div class='activearea'></div>
+		var aa = create_element('div', null, 'activearea');
+		aa.style.left= current_percent()+'%';
+		aa.style.width= '1%';
+		if( record.ing)
+			record.activearea = aa;
+		la.appendChild(aa);
+		//
+		$('layers').appendChild(la);
+		// create layer in waveform
+		var bt = create_element( 'div', 'bt-layer'+layercount);
+		$('bt-holder').appendChild(bt);
+		//
+		return layercount;
+	}
+	function ondrum(id,flag)
+	{
+		if( flag==='simulated')
+		{	//do not record
+		}
+		else if( record.ing && !paused)
 		{
 			var bt = anchor({ x: current_time(),
 							  y: 50*(1+record.layer%5) },
@@ -684,6 +691,19 @@
 			hide($('deletelayer'));
 		}
 	}
+	function apply_bound(la)
+	{
+		if( $('layer'+la))
+		{
+			var activearea= $('layer'+la).getElementsByClassName('activearea')[0];
+			var bound= layer_bound($('bt-layer'+la));
+			if( activearea && bound)
+			{
+				activearea.style.left= wave_to_percent(bound.start)+'%';
+				activearea.style.width= wave_to_percent(bound.end-bound.start)+'%';
+			}
+		}
+	}
 	function layer_bound(lay)
 	{
 		var start=lay.firstChild;
@@ -714,7 +734,7 @@
 
 	// simulated playback
 	function playback_map()
-	{
+	{	//user seeked on timeline, need to recalculate all cursors
 		var time = current_time();
 		var LAY = $('bt-holder').children;
 		if( LAY)
@@ -771,7 +791,7 @@
 	function beatup(bt)
 	{
 		var sid = bt.getAttribute('sid');
-		drumset.hit(sid);
+		drumset.hit(sid,'simulated');
 	}
 
 	// export
@@ -782,32 +802,67 @@
 	{
 		$('export').onclick=function()
 		{
-			var struct=
-			{
-				lyrics:[],
-				beat:[]
-			};
-			var content='';
-			var LYR = $('ly-holder').getElementsByClassName('lyrics');
-			for( var i=0; i<LYR.length; i++)
-			{
-				var px= parseInt(LYR[i].style.left);
-				var tt= round(px / horiscale);
-				struct.lyrics.push({
-					t: tt,
-					v: LYR[i].innerHTML
-				});
-			}
-			struct.lyrics= struct.lyrics.sortBy('t');
-			content=JSON.stringify(struct,null,' ');
-			$('texter').value=content;
-			//
+			var content = exporter();
 			var bb = new BlobBuilder;
 			bb.append(content);
 			var blob = bb.getBlob("text/plain;charset=utf-8");
 			saveAs(blob, 'out.js');
 		}
 	});
+	function exporter()
+	{
+		var struct=
+		{
+			lyrics:[],
+			beats:[]
+		};
+		var content='';
+
+		// lyrics
+		var LYR = $('ly-holder').getElementsByClassName('lyrics');
+		for( var i=0; i<LYR.length; i++)
+		{
+			var px= time_of(LYR[i]);
+			var tt= round(px / horiscale);
+			struct.lyrics.push({
+				t: tt,
+				v: LYR[i].innerHTML
+			});
+		}
+		struct.lyrics= struct.lyrics.sortBy('t');
+
+		//beats
+		var LAY = $('bt-holder').children;
+		if( LAY)
+		for( var i=0; i<LAY.length; i++)
+		{
+			for( var j=0, len=LAY[i].children.length; j<len; j++)
+			{
+				var px= time_of(LAY[i].children[j]);
+				var tt= round(px / horiscale);
+				struct.beats.push({
+					t: tt,
+					v: LAY[i].children[j].getAttribute('sid')
+				});
+			}
+		}
+		struct.beats= struct.beats.sortBy('t');
+
+		//export
+		content='define('+JSON.stringify(struct,null,' ')+');';
+		$('texter').value=content;
+		return content;
+	}
+	setInterval(function()
+	{
+		//auto save for every 2 minutes
+		if( !paused && !record.ing)
+		{
+			exporter();
+			update_store();
+			console.log('auto saved');
+		}
+	}, 2*60*1000);
 
 	// import
 	$('import').onclick=function()
@@ -815,18 +870,38 @@
 		var struct=JSON.parse($('texter').value);
 		if( struct)
 		{
-			clear_div($('ly-holder'));
-			//
+			//lyrics
 			if( struct.lyrics)
-			for( var i=0; i<struct.lyrics.length; i++)
 			{
-				add_lyrics(
-					{
-						x: struct.lyrics[i].t * horiscale,
-						y: 350
-					},
-					struct.lyrics[i].v
-				);
+				clear_div($('ly-holder'));
+				for( var i=0; i<struct.lyrics.length; i++)
+				{
+					add_lyrics(
+						{
+							x: struct.lyrics[i].t * horiscale,
+							y: 350
+						},
+						struct.lyrics[i].v
+					);
+				}
+			}
+
+			//beats
+			if( struct.beats && struct.beats.length>0)
+			{
+				clear_div($('bt-holder'));
+				clear_div($('layers'));
+				layercount=0;
+				var la = create_layer();
+				for( var i=0; i<struct.beats.length; i++)
+				{
+					var bt = anchor({ x: struct.beats[i].t * horiscale,
+									  y: 50*(1+la%5) },
+									'beat'+' '+drumtype(struct.beats[i].v),
+									'',
+									$('bt-layer'+la));
+					bt.setAttribute('sid',struct.beats[i].v);
+				}
 			}
 		}
 	}
@@ -837,11 +912,11 @@
 		store = new Persist.Store('celebrate-editor');
 		window.onbeforeunload = function()
 		{
-			store.set('data', $('texter').value);
+			update_store();
 		}
 		store.get('data',
 		function(ok,value){
-			if(ok && value!='')
+			if(ok && value)
 			{
 				$('texter').value = value;
 				$('import').onclick();
@@ -855,6 +930,10 @@
 			}
 		});
 	});
+	function update_store()
+	{
+		store.set('data', $('texter').value);
+	}
 
 	// helpers
 	function round(v,d)
@@ -914,6 +993,6 @@
 		return index;
 	}
 
-}());
+});
 </script>
 </body>

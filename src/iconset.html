@@ -2,7 +2,7 @@
 
 <head>
 	<meta http-equiv='content-type' content='text/html; charset=UTF-8'>
-	<script data-main="main.js" src="../third_party/require.js"></script>
+	<script data-main="iconset.js" src="../third_party/require.js"></script>
 	<script type="text/javascript">
 	//[--google analytics
 	/*
@@ -16,183 +16,186 @@
 	})(); */
 	//--]
 	</script>
-	<style>
-	#musicians .group
-	{
-		position: absolute;
-		/*border: 1px solid black;*/
-	}
-	#musicians .group div
-	{
-		position: relative;
-		float: left;
-		margin: 0 5px;
-		cursor: pointer;
-	}
-	#musicians .group a
-	{
-		position: absolute;
-		padding: 0 10px;
-		color: #FFF;
-		font-weight: bold;
-		font-size: 15px;
-		background-color: #AAA;
-	}
-	#musicians .group a.l
-	{
-		left:-28px;
-	}
-	#musicians .group a.r
-	{
-		right:-28px;
-	}
-	#musicians .group a.t
-	{
-		top:-20px;
-	}
-	#musicians .group a.b
-	{
-		bottom:-20px;
-	}
-	/**/
-	#hoho
-	{
-		left: 130px; top: 0px;
-	}
-	#agree
-	{
-		left: 130px; top: 30px;
-	}
-	#musicians #agree div
-	{
-		margin: 0 7px;
-	}
-	#hoho, #agree
-	{
-		height: 30px;
-	}
-	#g369a, #g369b
-	{
-		height: 34px;
-	}
-	#g369a
-	{
-		left: 170px; top: 130px;
-	}
-	#g369b
-	{
-		left: 170px; top: 370px;
-	}
-	#lyrics
-	{
-		position: absolute;
-		left: 170px; top: 200px;
-		width: 400px;
-		height: 40px;
-		font-size: 30px;
-		text-align: center;
-		font-family: sans;
-	}
-	#assorted
-	{
-		width: 400px;
-		left: 170px; top: 260px;
-		text-align: left;
-	}
-	#musicians #assorted div
-	{
-		float: none;
-	    display: inline-block;
-	    margin: 25px 5px 0px 5px;
-	}
-	#ass1
-	{
-		float: left;
-	}
-	#ass2
-	{
-		float: right;
-	}
-	#bouncer1,
-	#bouncer2
-	{
-		width: 164px; /* 2*(72+10) num*(sprite width+margin) */
-	}
-	#musicians #bouncer1 div,
-	#musicians #bouncer2 div
-	{
-		margin: 5px 5px;
-	}
-	#bouncer1
-	{
-		left: 0px; top: 100px;
-	}
-	#bouncer2
-	{
-		left: 570px; top: 100px;
-	}
-	#banghead1, #banghead2
-	{
-		left: 130px;
-	}
-	#banghead1, #banghead4
-	{
-		top: 450px;
-	}
-	#banghead2, #banghead3
-	{
-		top: 480px;
-	}
-	#banghead3
-	{
-		left: 355px; /*130+45*4*/
-	}
-	#banghead4
-	{
-		left: 310px; /*130+45*5*/
-	}
-	#bouncerlm
-	{
-		left: 130px;
-		top: 520px;
-		width: 495px;
-	}
-	#musicians #bouncerlm div:nth-child(3n)
-	{
-		float: left;
-		clear: left;
-	}
-	#musicians #bouncerlm div:nth-child(3n+1)
-	{
-		float: none;
-		display: inline-block;
-		margin: 220px 15px 0 15px;
-	}
-	#musicians #bouncerlm div:nth-child(3n+2)
-	{
-		float: right;
-		clear: right;
-	}
-	#diulm
-	{
-		width: 400px;
-		left: 183px; top: 520px;
-	}
-	#musicians #diulm div
-	{
-		margin: 50px 5px 0 5px;
-	}
-	#hoho2
-	{
-		left: 130px; top: 780px;
-	}
-	</style>
 </head>
 
 <body>
 
-	<input id='fps' value='NaNfps'></input>
+	<input id='fps' value='NaNfps' style='display:none;'></input>
+
 	<div id='game'>
+
+		<style>
+		#musicians .group
+		{
+			position: absolute;
+			/*border: 1px solid black;*/
+		}
+		#musicians .group div
+		{
+			position: relative;
+			float: left;
+			margin: 0 5px;
+			cursor: pointer;
+		}
+		#musicians .group a
+		{
+			position: absolute;
+			padding: 0 10px;
+			color: #FFF;
+			font-weight: bold;
+			font-size: 15px;
+			font-family: sans;
+			background-color: #AAA;
+		}
+		#musicians .group a.l
+		{
+			left:-28px;
+		}
+		#musicians .group a.r
+		{
+			right:-28px;
+		}
+		#musicians .group a.t
+		{
+			top:-20px;
+		}
+		#musicians .group a.b
+		{
+			bottom:-20px;
+		}
+		/**/
+		#hoho
+		{
+			left: 130px; top: 0px;
+		}
+		#agree
+		{
+			left: 130px; top: 30px;
+		}
+		#musicians #agree div
+		{
+			margin: 0 7px;
+		}
+		#hoho, #agree
+		{
+			height: 30px;
+		}
+		#g369a, #g369b
+		{
+			height: 34px;
+		}
+		#g369a
+		{
+			left: 170px; top: 130px;
+		}
+		#g369b
+		{
+			left: 170px; top: 370px;
+		}
+		#lyrics
+		{
+			position: absolute;
+			left: 170px; top: 200px;
+			width: 400px;
+			height: 40px;
+			font-size: 30px;
+			text-align: center;
+			font-family: sans;
+		}
+		#assorted
+		{
+			width: 400px;
+			left: 170px; top: 260px;
+			text-align: left;
+		}
+		#musicians #assorted div
+		{
+			float: none;
+			display: inline-block;
+			margin: 25px 5px 0px 5px;
+		}
+		#ass1
+		{
+			float: left;
+		}
+		#ass2
+		{
+			float: right;
+		}
+		#bouncer1,
+		#bouncer2
+		{
+			width: 164px; /* 2*(72+10) num*(sprite width+margin) */
+		}
+		#musicians #bouncer1 div,
+		#musicians #bouncer2 div
+		{
+			margin: 5px 5px;
+		}
+		#bouncer1
+		{
+			left: 0px; top: 100px;
+		}
+		#bouncer2
+		{
+			left: 570px; top: 100px;
+		}
+		#banghead1, #banghead2
+		{
+			left: 130px;
+		}
+		#banghead1, #banghead4
+		{
+			top: 450px;
+		}
+		#banghead2, #banghead3
+		{
+			top: 480px;
+		}
+		#banghead3
+		{
+			left: 355px; /*130+45*4*/
+		}
+		#banghead4
+		{
+			left: 310px; /*130+45*5*/
+		}
+		#bouncerlm
+		{
+			left: 130px;
+			top: 520px;
+			width: 495px;
+		}
+		#musicians #bouncerlm div:nth-child(3n)
+		{
+			float: left;
+			clear: left;
+		}
+		#musicians #bouncerlm div:nth-child(3n+1)
+		{
+			float: none;
+			display: inline-block;
+			margin: 220px 15px 0 15px;
+		}
+		#musicians #bouncerlm div:nth-child(3n+2)
+		{
+			float: right;
+			clear: right;
+		}
+		#diulm
+		{
+			width: 400px;
+			left: 183px; top: 520px;
+		}
+		#musicians #diulm div
+		{
+			margin: 50px 5px 0 5px;
+		}
+		#hoho2
+		{
+			left: 130px; top: 780px;
+		}
+		</style>
 		<div id='musicians'>
 
 			<div id='hoho' class='group' copy='7' key='6' sound='AMB_HHPD'>

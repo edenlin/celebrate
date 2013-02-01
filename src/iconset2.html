@@ -1,0 +1,305 @@
+<html>
+
+<head>
+	<meta http-equiv='content-type' content='text/html; charset=UTF-8'>
+	<script data-main="iconset.js" src="../third_party/require.js"></script>
+	<script type="text/javascript">
+	//[--google analytics
+	/*
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-37320960-2']);
+	_gaq.push(['_trackPageview']);
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})(); */
+	//--]
+	</script>
+</head>
+
+<body>
+
+	<input id='fps' value='NaNfps' style='display:none;'></input>
+
+	<div id='game'>
+
+		<style>
+		#musicians
+		{
+			position: absolute;
+			width: 850px;
+			left: 100px;
+			top: -10px;
+		}
+		#musicians .group
+		{
+			position: absolute;
+			/*border: 1px solid black;*/
+		}
+		#musicians .group div
+		{
+			position: relative;
+			float: left;
+			margin: 0 5px;
+			cursor: pointer;
+		}
+		#musicians .group a
+		{
+			position: absolute;
+			padding: 0 10px;
+			color: #FFF;
+			font-weight: bold;
+			font-size: 15px;
+			font-family: sans;
+			background-color: #AAA;
+		}
+		#musicians .group a.l
+		{
+			left:-28px;
+		}
+		#musicians .group a.r
+		{
+			right:-28px;
+		}
+		#musicians .group a.t
+		{
+			top:-20px;
+		}
+		#musicians .group a.b
+		{
+			bottom:-8px;
+		}
+		/*----------------------------*/
+		#diulm
+		{
+			left: -68px;
+			top: 45px;
+			width: 868px;
+		}
+		#hoho
+		{
+			left: 130px; top: 30px;
+		}
+		#agree
+		{
+			left: 130px; top: 60px;
+		}
+		#bouncerlm
+		{
+			left: -70px;
+			top: 93px;
+			width: 873px;
+		}
+		#musicians #bouncerlm div
+		{
+			margin: -4 5px 0;
+		}
+		#musicians .parallel div:nth-child(2n)
+		{
+			float: left;
+			clear: left;
+		}
+		#musicians .parallel div:nth-child(2n+1)
+		{
+			float: right;
+			clear: right;
+		}
+		#musicians .parallel2 div:nth-child(2n)
+		{
+			float: left;
+		}
+		#musicians .parallel2 div:nth-child(2n+1)
+		{
+			float: right;
+		}
+		#musicians #agree div
+		{
+			margin: 0 7px;
+		}
+		#hoho, #agree
+		{
+			height: 30px;
+		}
+		#g369a, #g369b
+		{
+			height: 34px;
+		}
+		#g369a
+		{
+			left: 170px; top: 130px;
+		}
+		#g369b
+		{
+			left: 170px; top: 370px;
+		}
+		#lyrics
+		{
+			position: absolute;
+			left: 170px; top: 200px;
+			width: 400px;
+			height: 40px;
+			font-size: 30px;
+			text-align: center;
+			font-family: sans;
+		}
+		#assorted
+		{
+			width: 400px;
+			left: 170px; top: 260px;
+			text-align: left;
+		}
+		#musicians #assorted div
+		{
+			float: none;
+			display: inline-block;
+			margin: 25px 5px 0px 5px;
+		}
+		#ass1
+		{
+			float: left;
+		}
+		#ass2
+		{
+			float: right;
+		}
+		#bouncer1,
+		#bouncer2
+		{
+			width: 164px; /* 2*(72+10) num*(sprite width+margin) */
+		}
+		#musicians #bouncer1 div,
+		#musicians #bouncer2 div
+		{
+			margin: 5px 5px;
+		}
+		#bouncer1
+		{
+			left: 0px; top: 100px;
+		}
+		#bouncer2
+		{
+			left: 570px; top: 100px;
+		}
+		#hoholm
+		{
+			left: -80px;
+			top: 430px;
+			width: 910px;
+		}
+		#banghead1, #banghead2
+		{
+			left: 125px;
+		}
+		#banghead1, #banghead4
+		{
+			top: 420px;
+		}
+		#banghead2, #banghead3
+		{
+			top: 450px;
+		}
+		#banghead3
+		{
+			left: 350px; /*130+45*4*/
+		}
+		#banghead4
+		{
+			left: 305px; /*130+45*5*/
+		}
+		#hoho2
+		{
+			left: 130px; top: 500px;
+		}
+		</style>
+		<div id='musicians'>
+
+			<div id='diulm' class='group parallel2' copy='2' key='f' sound='AMB_HHCL'>
+				<a class='l'>f</a>
+				<span sprite='hehelm'></span>
+				<span sprite='hehelm'></span>
+				<span sprite='diulm'></span>
+				<span sprite='diulm'></span>
+			</div>
+
+			<div id='hoho' class='group' copy='7' key='6' sound='AMB_HHPD'>
+				<a class='t'>6</a>
+				<span sprite='hoho'></span>
+			</div>
+
+			<div id='agree' class='group' copy='12' key='7' sound='CHINA_1'>
+				<a class=''>7</a>
+				<span sprite='agree'></span>
+			</div>
+
+			<div id='bouncerlm' class='group parallel' copy='4' key='v' sound='AMB_HHOP'>
+				<a class='l'>v</a>
+				<span sprite='bouncerlm'></span>
+				<span sprite='bouncerlm'></span>
+			</div>
+
+			<div id='g369a' class='group' copy='12' key='3' sound='CRASH_5' vol='70'>
+				<a class='t'>3</a>
+				<span sprite='369'></span>
+			</div>
+
+			<div id='lyrics'>愉快暢聚 我願你哋快樂同分享</div>
+
+			<div id='g369b' class='group' copy='12' key='4' sound='CRASH_1' vol='70'>
+				<a class='t'>4</a>
+				<span sprite='369'></span>
+			</div>
+
+			<div id='assorted' class='group' copy='1' key='5' sound='CRASH_6'>
+				<a>5</a>
+				<img id='ass1' src='../raw_sprite/ass.gif'></img>
+				<div style='width:14px;'></div>
+				<span sprite='banghead'></span>
+				<span sprite='sosad3'></span>
+				<span sprite='sosad2'></span>
+				<span sprite='clown3'></span>
+				<span sprite='sosad2'></span>
+				<span sprite='sosad3'></span>
+				<span sprite='banghead'></span>
+				<img id='ass2' src='../raw_sprite/ass.gif'></img>
+			</div>
+
+			<div id='bouncer1' class='group' copy='8' key='b' sound='AMB_SN13'>
+				<a>b</a>
+				<span sprite='bouncer'></span>
+			</div>
+			<div id='bouncer2' class='group' copy='8' key='n' sound='AMB_SN_5'>
+				<a>n</a>
+				<span sprite='bouncer'></span>
+			</div>
+
+			<div id='hoholm' class='group parallel2' copy='4'>
+				<span sprite='hoholm'></span>
+			</div>
+
+			<div id='banghead1' class='group' copy='4' key='r' sound='AMB_HTM'>
+				<a class='l'>r</a>
+				<span sprite='banghead'></span>
+			</div>
+			<div id='banghead2' class='group' copy='5' key='t' sound='AMB_MTM'>
+				<a class='l b'>t</a>
+				<span sprite='banghead'></span>
+			</div>
+			<div id='banghead3' class='group' copy='6' key='y' sound='AMB_FTM2'>
+				<a class='r b'>y</a>
+				<span sprite='banghead'></span>
+			</div>
+			<div id='banghead4' class='group' copy='7' key='u' sound='AMB_LTM2'>
+				<a class='r'>u</a>
+				<span sprite='banghead'></span>
+			</div>
+
+			<div id='hoho2' class='group' copy='7' key='g' sound='AMB_RIM1'>
+				<a class='l'>g</a>
+				<span sprite='hoho2'></span>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
