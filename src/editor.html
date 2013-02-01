@@ -266,6 +266,7 @@
 			<span class='tool'>data:</span>
 			<button id='import' class='tool'>import</button>
 			<button id='export' class='tool'>export</button>
+			<button id='loaddefault' class='tool'>load default</button>
 			<textarea id='texter' class='tool'>
 			</textarea>
 		</div>
@@ -928,18 +929,22 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 			}
 			else
 			{
-				require(['celebrate/music/Jubilant-default'],
-				function(defaultdata)
-				{
-					$('texter').value='define('+JSON.stringify(defaultdata,null,' ')+');';
-					$('import').onclick();
-				});
+				$('loaddefault').onclick();
 			}
 		});
 	});
 	function update_store()
 	{
 		store.set('data', $('texter').value);
+	}
+	$('loaddefault').onclick=function()
+	{
+		require(['celebrate/music/Jubilant-default'],
+		function(defaultdata)
+		{
+			$('texter').value='define('+JSON.stringify(defaultdata,null,' ')+');';
+			$('import').onclick();
+		});
 	}
 
 	// helpers
