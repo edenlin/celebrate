@@ -855,19 +855,24 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 	}
 	setInterval(function()
 	{
-		//auto save for every 2 minutes
-		if( !paused && !record.ing)
+		//auto save every minute
+		if( paused && !record.ing)
 		{
 			exporter();
 			update_store();
 			console.log('auto saved');
 		}
-	}, 2*60*1000);
+	}, 60*1000);
 
 	// import
 	$('import').onclick=function()
 	{
-		var struct=JSON.parse($('texter').value);
+		//strip the define();
+		var file=$('texter').value;
+		var a=file.indexOf('{');
+		var b=file.lastIndexOf('}');
+		file=file.substring(a,b+1);
+		var struct=JSON.parse(file);
 		if( struct)
 		{
 			//lyrics
@@ -923,8 +928,10 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 			}
 			else
 			{
-				head.js('../music/Jubilant-default.js',function()
+				require(['celebrate/music/Jubilant-default'],
+				function(defaultdata)
 				{
+					$('texter').value='define('+JSON.stringify(defaultdata,null,' ')+');';
 					$('import').onclick();
 				});
 			}

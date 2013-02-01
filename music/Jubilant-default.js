@@ -1,4 +1,4 @@
-document.getElementById('texter').value=JSON.stringify({
+define({
  "lyrics": [
   {
    "t": 26.06,
@@ -198,4 +198,4 @@ document.getElementById('texter').value=JSON.stringify({
   }
  ],
  "beat": []
-},null,' ');
+});
