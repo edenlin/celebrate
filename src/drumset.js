@@ -58,7 +58,7 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 				vol = parseInt(vol);
 			if( sound)
 			{	//create sound
-				drum.onclick=function()
+				drum.onmousedown=function()
 				{
 					This.hit(this.id);
 				}
