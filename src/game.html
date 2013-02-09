@@ -91,7 +91,6 @@ var chart_config=
 	div: $('chart'),	//chart element
 	width: 1000,		//width in px
 	timescale: 300,		//length in pixels representing one second
-	resolution: 45,		//processing framerate
 	block: { w:50, h:50}, //size of a block
 	lineheight: 70,		//line height
 	lines: 4,			//number of lines
@@ -184,7 +183,7 @@ function classify(v)
 	switch(v)
 	{
 		case 'd3': case 'd4': case 'd5': case 'd6': case 'd7': 
-			res.y = 0;
+			res.y = padding;
 		break;
 		case 'dr': case 'dt': case 'dy': case 'du':
 			res.y = chart_config.lineheight + padding;
@@ -201,7 +200,7 @@ function classify(v)
 }
 
 var chart = new Chart(chart_config);
-chart.test_run();//0.02
+chart.test_run();
 
 document.addEventListener("keydown", keydown, true);
 function keydown(e)

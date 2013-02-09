@@ -343,7 +343,7 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 				onload: function()
 				{
 					create_timescale();
-					if( layercount>0) //initial layers
+					if( layercount > 0)
 					{
 						apply_bound(1);
 						playback_map();
@@ -422,12 +422,13 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 		cursor.style.left='0px';
 		cursor.style.height=height+'px';
 		cursor.style.zIndex=2;
-		if( !cursor2)
-		{
-			// <div class='activearea'></div>
-			cursor2= create_element('div','cursor2','activearea');
-			$('layers').appendChild(cursor2);
-		}
+		create_cursor2();
+	}
+	function create_cursor2()
+	{
+		// <div class='activearea'></div>
+		cursor2= create_element('div','cursor2','activearea');
+		$('layers').appendChild(cursor2);
 	}
 	if( isbuzz)
 	{	//HTML5 audio appears to have a less precise timeupdate event
@@ -910,6 +911,11 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 					bt.setAttribute('sid',struct.beats[i].v);
 				}
 			}
+
+			//then
+			create_cursor2();
+			apply_bound(1);
+			playback_map();
 		}
 	}
 

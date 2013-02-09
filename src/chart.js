@@ -210,7 +210,7 @@ Chart.prototype.test_run=function(slow)
 		else
 			time = new Date().getTime()/1000-begintime; //time in sec
 		This.frame(time);
-	}, 1000/this.config.resolution);
+	}, 1000/45);
 }
 /*\
  * Chart.hit
@@ -258,9 +258,15 @@ Chart.prototype.hit=function(line)
 		This.hitmessout = This.lasttime + This.config.hitmessage.showtime;
 	}
 }
+/*\
+ * Chart.missed
+ [ method ]
+ * a beat went out of chart before being hit
+\*/
 Chart.prototype.missed=function()
 {
-	console.log('missed');
+	this.hitmessages[this.hitmessages.length-1].el.style.display=''; //show the message!
+	this.hitmessout = this.lasttime + this.config.hitmessage.showtime;
 }
 
 function Beat(type,config,holder)
