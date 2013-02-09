@@ -32,10 +32,22 @@
 	top: 50px;
 	overflow: hidden;
 }
+#hitmessage
+{
+	position: relative;
+}
 #hitmessage div
 {
+	padding: 0 5px;
+	position:relative;
+	float:left;
 	font-family: Arial, sans;
 	font-size: 30px;
+}
+#hitmessage.pop div
+{
+	top: 10px;
+	font-size: 25px;
 }
 .red
 {
@@ -50,12 +62,11 @@
 </style>
 
 <div id='hitmessage'>
-	<!--
-	<div class='red'><span style='font-size:120%;'>Perfec</span>池!</div>
-	<div class='red'>Good</div>
-	<div class='green'>bad</div>
-	<div class='green'>miss</div>
-	-->
+	<div id='perfect' class='red'>Perfec池</div>
+	<div id='good' class='red'>Good</div>
+	<div id='bad' class='green'>bad</div>
+	<div id='miss' class='green'>miss</div>
+	<div id='hitcount'></div>
 </div>
 
 <div id='chart'>
@@ -128,33 +139,10 @@ var chart_config=
 		centerx: 180/2, centery: 180/2,
 		dist: 30, //if(dist<30) when hit, show the hitmark
 		frame: 0,
-		showtime: 0.08
+		showtime: 0.1
 	},
-	hitmessage:
-	{
-		div: $('hitmessage'),
-		showtime: 0.2,
-		list:
-		[	//must be sorted to ascending order of dist
-			//	i.e. distance between center points of `beat` and `mark`
-			{
-				dist: 15, //if(d<=15)
-				html: "<div class='red'><span style='font-size:110%;'>Perfec</span>池!</div>"
-			},
-			{
-				dist: 30, //else if(d<=30)
-				html: "<div class='red'>Good</div>"
-			},
-			{
-				dist: 45, //else if(d<=45)
-				html: "<div class='green'>bad</div>"
-			},
-			{
-				dist: null, //else
-				html: "<div class='green'>miss</div>"
-			}
-		]
-	}
+	onhit: onhit,
+	onmiss: onmiss
 }
 
 function classify(v)
@@ -199,6 +187,63 @@ function classify(v)
 	return res;
 }
 
+function onhit(dist)
+{
+	//hit message
+	var mess;
+	var showtime = 0.2;
+	if( dist <= 15)
+		mess = 'perfect';
+	else if( dist <= 30)
+		mess = 'good';
+	else if( dist <= 45)
+		mess = 'bad';
+	else
+		mess = 'miss';
+	
+	if( mess === lastmessage.mess)
+	{
+		lastmessage.count++;
+		$('hitcount').innerHTML = lastmessage.count;
+	}
+	else
+	{
+		lastmessage.count = 0;
+		$('hitcount').innerHTML = '';
+	}
+	$('hitcount').className = $(mess).className;
+	lastmessage.mess = mess;
+	show($(mess));
+	show($('hitcount'));
+	$('hitmessage').className = 'pop';
+	setTimeout(function()
+	{
+		$('hitmessage').className = '';
+	}, 1000*showtime/6);
+	setTimeout(function()
+	{
+		hide($(mess));
+		hide($('hitcount'));
+	}, 1000*showtime);
+	
+	if( dist <= 45)
+		return true; //return true to mark the beat as `cleared`
+}
+function onmiss()
+{
+	onhit(1000);
+}
+
+hide($('perfect'));
+hide($('good'));
+hide($('bad'));
+hide($('miss'));
+var lastmessage=
+{
+	mess: '',
+	count: 0
+}
+
 var chart = new Chart(chart_config);
 chart.test_run();
 
@@ -238,6 +283,14 @@ function keydown(e)
 function $(id)
 {
 	return document.getElementById(id);
+}
+function show(el)
+{
+	el.style.display='';
+}
+function hide(el)
+{
+	el.style.display='none';
 }
 
 });

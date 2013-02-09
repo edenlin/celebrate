@@ -105,32 +105,10 @@ function Chart(config)
 		}
 	}
 	
-	//hitmessage
-	if( config.hitmessage)
-	{
-		this.hitmessages = [];
-		for( var i=0; i<config.hitmessage.list.length; i++)
-		{
-			var mes = config.hitmessage.list[i];
-			config.hitmessage.div.innerHTML += mes.html;
-			this.hitmessages[i] =
-			{
-				dist: mes.dist,
-				el: null
-			}
-		}
-		for( var i=0; i<config.hitmessage.list.length; i++)
-		{
-			this.hitmessages[i].el = config.hitmessage.div.children[i];
-			this.hitmessages[i].el.style.display = 'none';
-		}
-	}
-	
 	//for `frame`
 	this.lasttime = 0; //serve to calculate the time difference between frames
 	this.lastbar = 0; //time when last bar is born
 	this.beatcursor = 0; //the array index on `data.beats` of the lastest not-yet-born beat
-	this.hitmessout = 0; //timeout of hit messages
 	this.hitmarkout = 0;
 }
 
@@ -166,14 +144,6 @@ Chart.prototype.frame=function(time)
 			this.beats.create(config.width, res.y, res.frame, res.hitframe);
 		}
 		this.beatcursor=j;
-	}
-	
-	//hitmessout
-	if( this.hitmessout!=='cleared' && time >= this.hitmessout)
-	{
-		for( var i=0; i<this.hitmessages.length; i++)
-			this.hitmessages[i].el.style.display = 'none';
-		this.hitmessout = 'cleared';
 	}
 	
 	//hitmarkout
@@ -238,27 +208,13 @@ Chart.prototype.hit=function(line)
 				This.hitmarks[line].show();
 				This.hitmarkout = This.lasttime + This.config.hitmark.showtime;
 			}
-			for( var i=0; i<This.hitmessages.length-1; i++)
-			{
-				//hit message
-				if( dist <= This.hitmessages[i].dist)
-				{
-					K.clear();
-					show_and_update(i);
-					return 'break';
-				}
-			}
-			//else
-			show_and_update(This.hitmessages.length-1);
+			//onhit
+			if( This.config.onhit)
+			if( This.config.onhit(dist))
+				K.clear();
 			return 'break';
 		}
 	});
-	
-	function show_and_update(I)
-	{
-		This.hitmessages[I].el.style.display=''; //show the message!
-		This.hitmessout = This.lasttime + This.config.hitmessage.showtime;
-	}
 }
 /*\
  * Chart.missed
@@ -267,8 +223,8 @@ Chart.prototype.hit=function(line)
 \*/
 Chart.prototype.missed=function()
 {
-	this.hitmessages[this.hitmessages.length-1].el.style.display=''; //show the message!
-	this.hitmessout = this.lasttime + this.config.hitmessage.showtime;
+	if( this.config.onmiss)
+		this.config.onmiss();
 }
 
 function Beat(type,config,holder)
