@@ -1,41 +1,7 @@
+<!DOCTYPE html>
+<head></head>
 <body>
 <style>
-.brass
-{
-background: #fbe6c5;
-background: -moz-linear-gradient(-45deg,  #fbe6c5 0%, #e8ae52 26%, #e3a033 32%, #f7dbad 100%);
-background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#fbe6c5), color-stop(26%,#e8ae52), color-stop(32%,#e3a033), color-stop(100%,#f7dbad));
-background: -webkit-linear-gradient(-45deg,  #fbe6c5 0%,#e8ae52 26%,#e3a033 32%,#f7dbad 100%);
-background: -o-linear-gradient(-45deg,  #fbe6c5 0%,#e8ae52 26%,#e3a033 32%,#f7dbad 100%);
-background: -ms-linear-gradient(-45deg,  #fbe6c5 0%,#e8ae52 26%,#e3a033 32%,#f7dbad 100%);
-background: linear-gradient(135deg,  #fbe6c5 0%,#e8ae52 26%,#e3a033 32%,#f7dbad 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbe6c5', endColorstr='#f7dbad',GradientType=1 );
-border-color: #815C23;
-text-shadow: 2px 2px 0px #815C23,
-			 2px -2px 0px #815C23,
-			-2px 2px 0px #815C23,
-			-2px -2px 0px #815C23,
-			0px 0px 0px #F00
-			;
-}
-.drum
-{
-background: #ca877a;
-background: -moz-linear-gradient(45deg,  #ca877a 0%, #954f41 68%, #a95949 74%, #d19387 100%);
-background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#ca877a), color-stop(68%,#954f41), color-stop(74%,#a95949), color-stop(100%,#d19387));
-background: -webkit-linear-gradient(45deg,  #ca877a 0%,#954f41 68%,#a95949 74%,#d19387 100%);
-background: -o-linear-gradient(45deg,  #ca877a 0%,#954f41 68%,#a95949 74%,#d19387 100%);
-background: -ms-linear-gradient(45deg,  #ca877a 0%,#954f41 68%,#a95949 74%,#d19387 100%);
-background: linear-gradient(45deg,  #ca877a 0%,#954f41 68%,#a95949 74%,#d19387 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ca877a', endColorstr='#d19387',GradientType=1 );
-border-color: #7B3122;
-text-shadow: 1px 1px 0px #7B3122,
-			 1px -1px 0px #7B3122,
-			-1px 1px 0px #7B3122,
-			-1px -1px 0px #7B3122,
-			0px 0px 0px #F00
-			;
-}
 .base
 {
 	background: #AAA;
@@ -44,18 +10,6 @@ text-shadow: 1px 1px 0px #7B3122,
 #beats div
 {
 	position: absolute;
-	width:48px;
-	height:48px;
-    line-height:50px;
-	border-radius:8px;
-    text-align: center;
-	border-width: 2px;
-	border-style: solid;
-	/*text*/
-	font-size: 25px;
-	font-family: jhenghei, sans;
-	font-weight: bold;
-	color: white;
 }
 #rules div
 {
@@ -74,10 +28,11 @@ text-shadow: 1px 1px 0px #7B3122,
 #chart
 {
 	border: 1px solid black;
-	position: relative;
+	position: absolute;
+	top: 50px;
 	overflow: hidden;
 }
-.big
+#hitmessage div
 {
 	font-family: Arial, sans;
 	font-size: 30px;
@@ -94,6 +49,15 @@ text-shadow: 1px 1px 0px #7B3122,
 }
 </style>
 
+<div id='hitmessage'>
+	<!--
+	<div class='red'><span style='font-size:120%;'>Perfec</span>池!</div>
+	<div class='red'>Good</div>
+	<div class='green'>bad</div>
+	<div class='green'>miss</div>
+	-->
+</div>
+
 <div id='chart'>
 	<!--
 	<div id='rules'>
@@ -103,20 +67,12 @@ text-shadow: 1px 1px 0px #7B3122,
 	</div>
 	<div id='beats'>
 	</div>
+	<div id='marks'>
+	</div>
+	<div id='hitmarks'>
+	</div>
 	-->
 </div>
-
-<!--
-<div class='brass'><span>5</span></div>
-<div class='drum'><span>r</span></div>
-<div class='brass'><span>f</span></div>
-<div class='drum'><span>b</span></div>
-<div class='base'></div>
-<div class='big red'>Good</div>
-<div class='big red'>Perfec<span style='font-size:90%;'>池</span></div>
-<div class='big green'>bad</div>
-<div class='big green'>miss</div>
--->
 
 <script src="../third_party/require.js"></script>
 <script>
@@ -127,12 +83,13 @@ requirejs.config({
 		'third_party':'celebrate/third_party'
 	}
 });
-requirejs(['F.core/effects-pool','cele/gamedata'],function(Fset,gamedata){
+requirejs(['cele/gamedata','cele/chart'],
+function(gamedata,Chart){
 
 var chart_config=
 {
 	div: $('chart'),	//chart element
-	width: 1200,		//width in px
+	width: 1000,		//width in px
 	timescale: 300,		//length in pixels representing one second
 	resolution: 45,		//processing framerate
 	block: { w:50, h:50}, //size of a block
@@ -140,191 +97,145 @@ var chart_config=
 	lines: 4,			//number of lines
 	basebeat: 2,		//interval of basebeat in seconds, visualized by bars
 	data: gamedata,		//data object exported by `editor`
-	ondata: classify	//return the name,class and y position of a data beat
+	ondata: classify,	//return the y position and sprite frame of a beat
+	beat:		//animator and sprite config for a beat
+	{
+		x:0, y:0,     //top left margin of the frames
+		w:52, h:50,   //width, height of a frame
+		gx:10,gy:1,   //define a gx*gy grid of frames
+		img:'beats.png', //image
+		centerx: 50/2, centery: 50/2, //center point to check for coincidence
+		dist: 30 //if(dist<30) when hit, change to `hitframe`
+	},
+	mark:		//mark at the left most of each line
+	{
+		x:0, y:50,
+		w:70, h:70,
+		gx:10, gy:1,
+		img:'beats.png',
+		line:[ //sprite frame index at each line
+		1,
+		0,
+		1,
+		0],
+		centerx: 70/2, centery: 70/2
+	},
+	hitmark:	//mark when a proper beat is being hit
+	{
+		x:0, y:0,
+		w:400, h:180,
+		gx:10, gy:1,
+		img:'mark.png',
+		centerx: 180/2, centery: 180/2,
+		dist: 30, //if(dist<30) when hit, show the hitmark
+		frame: 0,
+		showtime: 0.08
+	},
+	hitmessage:
+	{
+		div: $('hitmessage'),
+		showtime: 0.2,
+		list:
+		[	//must be sorted to ascending order of dist
+			//	i.e. distance between center points of `beat` and `mark`
+			{
+				dist: 15, //if(d<=15)
+				html: "<div class='red'><span style='font-size:110%;'>Perfec</span>池!</div>"
+			},
+			{
+				dist: 30, //else if(d<=30)
+				html: "<div class='red'>Good</div>"
+			},
+			{
+				dist: 45, //else if(d<=45)
+				html: "<div class='green'>bad</div>"
+			},
+			{
+				dist: null, //else
+				html: "<div class='green'>miss</div>"
+			}
+		]
+	}
 }
 
 function classify(v)
 {
 	var res=
 	{
-		'name': v.slice(1),
-		'class': '',
-		'y': 0
+		y: 0,
+		frame: 0,
+		hit_frame: 0
 	}
 	switch(v)
 	{
 		case 'd3': case 'd4': case 'd5': case 'd6': case 'd7': 
 		case 'df': case 'dv': 
-		res['class'] = 'brass';
+		res.frame = 2;
+		res.hitframe = 3;
 		break;
 
 		case 'dr': case 'dt': case 'dy': case 'du':
 		case 'db': case 'dg': case 'dn':
-		res['class'] = 'drum';
+		res.frame = 0;
+		res.hitframe = 1;
 		break;
 	}
+	var padding = (chart_config.lineheight - chart_config.block.h)/2;
 	switch(v)
 	{
 		case 'd3': case 'd4': case 'd5': case 'd6': case 'd7': 
 			res.y = 0;
 		break;
 		case 'dr': case 'dt': case 'dy': case 'du':
-			res.y = chart_config.lineheight;
+			res.y = chart_config.lineheight + padding;
 		break;
 		case 'df': case 'dg':
-			res.y = chart_config.lineheight * 2;
+			res.y = chart_config.lineheight * 2 + padding;
 		break;
 		case 'dv': case 'db': case 'dn':
-			res.y = chart_config.lineheight * 3;
+			res.y = chart_config.lineheight * 3 + padding;
 		break;
 	}
 
 	return res;
 }
 
-function Chart(config)
-{
-	var div = config.div;
-	var data = config.data;
-	div.style.width = config.width+'px';
-	div.style.height = config.lineheight*config.lines+'px';
-
-	//rules
-	create_element('div','bars',null,null,div);
-	create_element('div','rules',null,null,div);
-	for( var i=1; i<config.lines; i++)
-		set_xy(create_element('div',null,null,null,$('rules')), 0, i*config.lineheight);
-
-	//bars & beats
-	create_element('div','beats',null,null,div);
-	var br_config=
-	{
-		init_size: 5,
-		batch_size: 5,
-		max_size: 100,
-		construct: function()
-		{
-			return new Beat($('bars'));
-		}
-	}
-	var bt_config=
-	{
-		init_size: 20,
-		batch_size: 10,
-		max_size: 100,
-		construct: function()
-		{
-			return new Beat($('beats'));
-		}
-	}
-	var bars = new Fset(br_config);
-	var beats = new Fset(bt_config);
-
-	//clock
-	var begintime = new Date().getTime()/1000;
-	var lasttime = 0;
-	var lastbar = 0;
-	var beatcursor = 0;
-	var clock = setInterval(function()
-	{
-		var time = new Date().getTime()/1000-begintime; //time in sec
-		var margin = time + config.width/config.timescale; //the right margin time
-
-		//bars
-		if( margin >= lastbar + config.basebeat)
-		{
-			bars.create(config.width);
-			lastbar = Math.floor(margin/config.basebeat)*config.basebeat; //round down to basebeat time
-		}
-		//beats
-		for( var j=beatcursor, beatlength=data.beats.length; j<beatlength; j++)
-		{
-			if( margin < data.beats[j].t)
-				break;
-		}
-		if( j>beatcursor)
-		{
-			for( var k=beatcursor; k<j; k++)
-			{
-				var res=config.ondata(data.beats[k].v);
-				beats.create(config.width, res.y, res['name'], res['class']);
-			}
-			beatcursor=j;
-		}
-
-		//updates
-		var diff= (time-lasttime)*config.timescale;
-		bars .call_each('frame', diff);
-		beats.call_each('frame', diff);
-
-		//wrap up
-		lasttime = time;
-	}, 1000/config.resolution);
-}
-
-function Beat(holder)
-{
-	this.el = create_element('div',null,null,null,holder);
-	this.die();
-}
-Beat.prototype.born=function(x,y,Name,Class)
-{
-	set_xy(this.el, x, y);
-	if( Name)
-		this.el.innerHTML=Name;
-	if( Class)
-		this.el.setAttribute('class',Class);
-}
-Beat.prototype.die=function()
-{
-	set_xy(this.el, -1000);
-}
-Beat.prototype.frame=function(speed)
-{
-	move_xy(this.el, -speed);
-	if( get_xy(this.el).x < -1000)
-		this.parent.die();
-}
-
 var chart = new Chart(chart_config);
+chart.test_run();//0.02
+
+document.addEventListener("keydown", keydown, true);
+function keydown(e)
+{
+	if (!e) e = window.event;
+	var a = e.keyCode;
+	if (a>='0'.charCodeAt(0) && a<='9'.charCodeAt(0))
+	{
+		chart.hit(0);
+		return true;
+	}
+	else
+	{
+		switch (String.fromCharCode(a).toLowerCase())
+		{
+		case 'q': case 'w': case 'e': case 'r': case 't': case 'y':
+		 case 'u': case 'i': case 'o': case 'p':
+			chart.hit(1);
+			return true;
+		
+		case 'a': case 's': case 'd': case 'f': case 'g':
+		 case 'h': case 'j': case 'k': case 'l':
+			chart.hit(2);
+			return true;
+		
+		case 'z': case 'x': case 'c': case 'v':
+		 case 'b': case 'n': case 'm':
+			chart.hit(3);
+			return true;
+		}
+	}
+}
 
 //helpers
-function set_xy(el,x,y)
-{
-	if( x!==undefined && x!==null)
-		el.style.left = x+'px';
-	if( y!==undefined && y!==null)
-		el.style.top  = y+'px';
-	return el;
-}
-function move_xy(el,x,y)
-{
-	if( x)
-		el.style.left = x+parseInt(el.style.left)+'px';
-	if( y)
-		el.style.top  = y+parseInt(el.style.top)+'px';
-	return el;
-}
-function get_xy(el)
-{
-	return {
-		x: parseInt(el.style.left),
-		y: parseInt(el.style.top)
-	}
-}
-function create_element(tag,id,Class,innerHTML,appendto)
-{
-	var el = document.createElement(tag);
-	if( id)
-		el.id=id;
-	if( Class)
-		el.setAttribute('class',Class);
-	if( innerHTML)
-		el.innerHTML= innerHTML;
-	if( appendto)
-		appendto.appendChild(el);
-	return el;
-}
 function $(id)
 {
 	return document.getElementById(id);

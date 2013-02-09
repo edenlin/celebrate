@@ -36,7 +36,7 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 			//key: id
 		}
 		//
-		drumsetel.setAttribute('class','drumset');
+		drumsetel.className='drumset';
 		var DRU = drumsetel.getElementsByTagName('div');
 		for( var i=0; i<DRU.length; i++)
 		{
@@ -82,7 +82,7 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 			{
 				var im = document.createElement('img');
 				im.src = img;
-				im.setAttribute('class','drumimg');
+				im.className='drumimg';
 				drum.appendChild(im);
 			}
 		}
@@ -96,6 +96,10 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 				return This.hit(This.key[key]);
 			}
 			document.addEventListener("keydown", keydown, true);
+			this.removeEventListener=function()
+			{
+				document.removeEventListener("keydown", keydown, true);
+			}
 		}
 	}
 	drumset.prototype.hit=function(id /*,arg*/) //arguments will be passed through

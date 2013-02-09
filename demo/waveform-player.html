@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
 <style>
 .bar
@@ -72,7 +73,7 @@ function value(sam)
 {
 	var wave=document.getElementById('wave');
 	var bar = document.createElement('div');
-	bar.setAttribute('class','bar');
+	bar.className='bar';
 	if( sam.v>0)
 	{
 		bar.style.height=(sam.v+'px');
