@@ -227,6 +227,8 @@ Chart.prototype.hit=function(line)
 		if( pos.y >= line*This.config.lineheight &&
 			pos.y < (line+1)*This.config.lineheight)
 		{
+			if( K.cleared)
+				return 'continue';
 			//beat hit change frame
 			if( dist <= This.config.beat.dist)
 				K.hit();
