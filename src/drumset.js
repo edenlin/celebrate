@@ -8,7 +8,7 @@
 	that the only important method is `hit`.
  */
 
-define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
+define(['cele/drum','F.core/util','F.core/css!celebrate/src/drum.css'], function(Drum,util)
 {
 	/**
 		config=
@@ -33,7 +33,7 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 		}
 		this.key=
 		{
-			//key: id
+			//key: [id]
 		}
 		//
 		drumsetel.className='drumset';
@@ -53,7 +53,12 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 				img = attr('img');
 			//
 			if( key)
-				this.key[key]=drum.id;
+			{
+				if( !this.key[key])
+					this.key[key]=[drum.id];
+				else
+					this.key[key].push(drum.id);
+			}
 			if( vol)
 				vol = parseInt(vol);
 			if( sound)
@@ -102,16 +107,21 @@ define(['cele/drum','F.core/css!celebrate/src/drum.css'], function(Drum)
 			}
 		}
 	}
-	drumset.prototype.hit=function(id /*,arg*/) //arguments will be passed through
+	drumset.prototype.hit=function(ID /*,arg*/) //arguments will be passed through
 	{
-		if( this.set[id])
+		var ID = util.make_array(ID);
+		for( var i=0; i<ID.length; i++)
 		{
-			if( this.onhit)
+			var id = ID[i];
+			if( this.set[id])
 			{
-				this.onhit.apply(null, arguments);
+				if( this.onhit)
+				{
+					this.onhit.apply(null, arguments);
+				}
+				this.set[id].hit();
+				return true;
 			}
-			this.set[id].hit();
-			return true;
 		}
 	}
 	function isEmpty(obj)

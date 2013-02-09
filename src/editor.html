@@ -114,6 +114,7 @@
 	width: 80px;
 	height: 25px;
 	border: 1px solid #AAA;
+	overflow: hidden;
 }
 #ly-box
 {
@@ -430,7 +431,7 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 		cursor2= create_element('div','cursor2','activearea');
 		$('layers').appendChild(cursor2);
 	}
-	if( isbuzz)
+	/* if( isbuzz)
 	{	//HTML5 audio appears to have a less precise timeupdate event
 		cursor_timer = setInterval(function()
 		{
@@ -444,7 +445,7 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 			}
 			lasttime=curtime;
 		}, 1000/30);
-	}
+	}*/
 
 	// seeker controls
 	paused=true;
@@ -646,6 +647,8 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 	}
 	function ondrum(id,flag)
 	{
+		if( id instanceof Array)
+			id=id[0];
 		if( flag==='simulated')
 		{	//do not record
 		}

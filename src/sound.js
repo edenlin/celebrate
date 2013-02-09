@@ -11,6 +11,7 @@ define(['cele/drum'],function()
 			timeupdate,
 			onload
 		} */
+		var sounds=[];
 		var create_sound=function(filepath,config)
 		{
 			var has_extension=false;
@@ -30,7 +31,8 @@ define(['cele/drum'],function()
 			{
 				sound.bind('timeupdate', function()
 				{
-					config.timeupdate(this.getTime());
+					obj.time = this.getTime();
+					config.timeupdate(obj.time);
 				})
 			}
 			if( config.onload)
@@ -40,12 +42,39 @@ define(['cele/drum'],function()
 					config.onload();
 				});
 			}
+			var obj=
+			{
+				sound: sound,
+				timeupdate: config.timeupdate,
+				time: 0
+			}
+			sounds.push(obj);
 			return sound;
 		}
 		create_sound.ready=function(fun)
 		{
 			fun();
 		}
+		var lasttime = new Date().getTime();
+		setInterval(function()
+		{
+			var time = new Date().getTime();
+			var dt = (Math.floor(time-lasttime))/1000;
+			for( var i=0; i<sounds.length; i++)
+			{
+				if( !sounds[i].sound.isPaused())
+				{
+					if( dt<0.25)
+					{
+						if( dt>0.1)
+							dt *= 0.9;
+						sounds[i].time += dt;
+						sounds[i].timeupdate(sounds[i].time);
+					}
+				}
+			}
+			lasttime = time;
+		}, 1000/25);
 		return create_sound;
 	}
 	else if( typeof soundManager!=='undefined')

@@ -1,8 +1,9 @@
 /** drum resolves between 2 implementations, HTML5 and Flash backend.
  */
 
-if ( !document.createElement( 'audio' ).canPlayType ||
-     window.location.href.match(/backend=flash/) )
+//if ( !document.createElement( 'audio' ).canPlayType ||
+//     window.location.href.match(/backend=flash/) )
+if( true)
 {
 	/** use of Sound Manager 2 (SM2), which uses a Flash backend
 		Flash 9 supports multishot natively and works slightly better than HTML5.
@@ -69,7 +70,7 @@ if ( !document.createElement( 'audio' ).canPlayType ||
 	});
 }
 else
-{	//default as html5
+{
 
 	/**	use of buzz sound library, which is pure HTML5.
 		one problem is HTML5 audio dont allow multiple instance playback
