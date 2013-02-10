@@ -58,3 +58,13 @@ var chart_config=
 ### musician.js
 `musician` fullfill the visual functionality of a drum element. a `musician` contains a sprite that will play an animation when being `hit`.
 `Mgroup` is a group of musicians. they are the groups you see in [example2](http://tyt2y3.github.com/celebrate/src/iconset.html).
+
+## samples
+[`analyzer.html`](http://tyt2y3.github.com/celebrateanalyzer.html)	[`SM2_player.html`](http://tyt2y3.github.com/celebrateSM2_player.html)	[`buzz_player.html`](http://tyt2y3.github.com/celebratebuzz_player.html)	[`sugar.html`](http://tyt2y3.github.com/celebratesugar.html)	[`waveform.html`](http://tyt2y3.github.com/celebratewaveform.html)	[`filesave.html`](http://tyt2y3.github.com/celebratefilesave.html)	[`waveform-player.html`](http://tyt2y3.github.com/celebratewaveform-player.html)	[`editor.html`](http://tyt2y3.github.com/celebrateeditor.html)	[`drumset.html`](http://tyt2y3.github.com/celebratedrumset.html)	[`game.html`](http://tyt2y3.github.com/celebrategame.html)	[`iconset.html`](http://tyt2y3.github.com/celebrateiconset.html)	[`iconset2.html`](http://tyt2y3.github.com/celebrateiconset2.html)	[`shapes.html`](http://tyt2y3.github.com/celebrateshapes.html)	[`index.html`](http://tyt2y3.github.com/celebrateindex.html)	[`game.html`](http://tyt2y3.github.com/celebrategame.html)	
+
+## Project F
+<img src="http://2.bp.blogspot.com/-k-My1B-YlaU/T8JUBAYpu9I/AAAAAAAAACI/OnCvkzFF5jw/s1600/logo_l1_s.png" height="80"/>
+celebrate is a member of [Project F](http://tyt2y3.github.com/F.core) games.
+
+## License
+[License of Project F](http://project--f.blogspot.hk/2012/05/license.html). In short, everything except commercial use is allowed.
