@@ -54,21 +54,21 @@ var chart_config=
 		img:'mark.png',
 		centerx: 180/2, centery: 180/2,
 		dist: 30, //if(dist<30) when hit, show the hitmark
-		frame: 0,
-		showtime: 0.1
+		frame: 0, //sprite frame index
+		showtime: 0.1 //time in sec before the hitmark to disappear
 	},
-	fly:	//fly away after being hit
+	fly:	//fly away along parabola after being hit
 	{
-		to:
+		to: //trajectory target
 		{
 			x: 500, y: -10
 		},
-		height: 200,
-		steps: 12,
-		div: $('flyers')
+		height: 200, //max. height gain during flight
+		steps: 12, //no. of animation frames
+		div: $('flyers') //container
 	},
-	onhit: onhit,
-	onmiss: onmiss
+	onhit: onhit, //when a beat is being hit
+	onmiss: onmiss //when a beat is being missed
 }
 var judge=
 {
@@ -289,26 +289,27 @@ $('start').onclick=function()
 	}
 }
 
+var controlmap=
+{
+	'v':0,
+	'b':1,
+	' ':2
+}
 document.addEventListener("keydown", keydown, true);
 function keydown(e)
 {
 	if (!e) e = window.event;
-	var a = e.keyCode;
-	switch (String.fromCharCode(a).toLowerCase())
+	var a = String.fromCharCode(e.keyCode).toLowerCase();
+	for( var i in controlmap)
 	{
-	case 'v':
-		chart.hit(0);
-		return true;
-	
-	case 'b':
-		chart.hit(1);
-		return true;
-	
-	case ' ': /* IE9? */
-		chart.hit(2);
-		return true;
-	
-	case 'p':
+		if( a===i)
+		{
+			chart.hit(controlmap[i]);
+			return true;
+		}
+	}
+	if( a==='p')
+	{
 		if( paused)
 			music.play();
 		else
