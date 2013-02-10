@@ -42,7 +42,7 @@ var chart_config=
 		text:[ //display symbol of each line
 		'v',
 		'b',
-		'_'
+		'space'
 		],
 		centerx: 70/2, centery: 70/2
 	},
