@@ -877,7 +877,7 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 		{
 			exporter();
 			update_store();
-			console.log('auto saved');
+			if( window.console) console.log('auto saved');
 		}
 	}, 60*1000);
 

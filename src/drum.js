@@ -1,13 +1,13 @@
 /** drum resolves between 2 implementations, HTML5 and Flash backend.
  */
 
-if ( !document.createElement( 'audio' ).canPlayType ||
-     window.location.href.match(/backend=flash/) )
+// if ( !document.createElement( 'audio' ).canPlayType)
+if( !window.location.href.match(/HTML5/))
 {
 	/** use of Sound Manager 2 (SM2), which uses a Flash backend
 		Flash 9 supports multishot natively and works slightly better than HTML5.
 	 */
-	console.log('Sound Manager 2 backend');
+	if( window.console) console.log('Sound Manager 2 backend');
 	define(['third_party/soundmanager2-nodebug-jsmin'],function()
 	{
 		soundManager.setup(
@@ -62,8 +62,6 @@ if ( !document.createElement( 'audio' ).canPlayType ||
 				this.activecount++;
 				this.sound.play();
 			}
-			else
-				console.log('full');
 		}
 		return drum;
 	});
@@ -78,7 +76,7 @@ else
 		elements and play them on demand.
 		luckily, F.core provides a class `effects_pool` for this purpose.
 	 */
-	console.log('buzz backend');
+	if( window.console) console.log('buzz backend');
 	define(['F.core/effects-pool','third_party/buzz'],
 	function (Feffects_pool)
 	{

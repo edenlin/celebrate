@@ -278,6 +278,7 @@ $('start').onclick=function()
 	if( this.innerHTML==='Start')
 	{
 		hide($('start'));
+		hide($('instruction'));
 		$('musicians').className = 'gamestarted';
 		iconset.drumset.removeEventListener();
 		chart.pre_run(function()
