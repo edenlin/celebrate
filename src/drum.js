@@ -1,9 +1,8 @@
 /** drum resolves between 2 implementations, HTML5 and Flash backend.
  */
 
-//if ( !document.createElement( 'audio' ).canPlayType ||
-//     window.location.href.match(/backend=flash/) )
-if( true)
+if ( !document.createElement( 'audio' ).canPlayType ||
+     window.location.href.match(/backend=flash/) )
 {
 	/** use of Sound Manager 2 (SM2), which uses a Flash backend
 		Flash 9 supports multishot natively and works slightly better than HTML5.

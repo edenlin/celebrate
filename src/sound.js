@@ -6,11 +6,6 @@ define(['cele/drum'],function()
 {
 	if( typeof buzz!=='undefined')
 	{
-		/** config=
-		{
-			timeupdate,
-			onload
-		} */
 		var sounds=[];
 		var create_sound=function(filepath,config)
 		{
@@ -29,10 +24,19 @@ define(['cele/drum'],function()
 			});
 			if( config.timeupdate)
 			{
-				sound.bind('timeupdate', function()
+				sound
+				.bind('timeupdate', function()
+				{
+					var time = this.getTime();
+					if( time > obj.time)
+					{
+						obj.time = time;
+						config.timeupdate(obj.time);
+					}
+				})
+				.bind('seeked',function()
 				{
 					obj.time = this.getTime();
-					config.timeupdate(obj.time);
 				})
 			}
 			if( config.onload)
@@ -40,6 +44,27 @@ define(['cele/drum'],function()
 				sound.bind('loadedmetadata', function()
 				{
 					config.onload();
+				});
+			}
+			if( config.ended)
+			{
+				sound.bind('ended',function()
+				{
+					config.ended();
+				});
+			}
+			if( config.loaded)
+			{
+				sound.bind('canplaythrough',function()
+				{
+					config.loaded();
+				});
+			}
+			if( config.progress)
+			{
+				sound.bind('progress',function(x)
+				{
+					config.progress(x);
 				});
 			}
 			var obj=
@@ -66,8 +91,6 @@ define(['cele/drum'],function()
 				{
 					if( dt<0.25)
 					{
-						if( dt>0.1)
-							dt *= 0.9;
 						sounds[i].time += dt;
 						sounds[i].timeupdate(sounds[i].time);
 					}
@@ -109,6 +132,30 @@ define(['cele/drum'],function()
 				{
 					if( this.readyState===3) //success
 						config.onload();
+				}
+			}
+			if( config.ended)
+			{
+				sm_config.onfinish=function()
+				{
+					config.ended();
+				}
+			}
+			if( config.loaded)
+			{
+				sm_config.whileloading=function()
+				{
+					if( !this.canplaythrough)
+					if( (this.bytesLoaded/this.bytesTotal) > 0.5)
+					{
+						config.loaded();
+						this.canplaythrough = true;
+					}
+					else
+					{
+						if( config.progress)
+							config.progress(this.bytesLoaded/this.bytesTotal*100);
+					}
 				}
 			}
 			var sound = soundManager.createSound(sm_config);

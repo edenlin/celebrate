@@ -1,5 +1,5 @@
-define(['F.core/effects-pool','F.core/sprite','F.core/animator'],
-function (Fset,Fsprite,Fanimator){
+define(['F.core/effects-pool','F.core/sprite','F.core/animator','F.core/math'],
+function (Fset,Fsprite,Fanimator,Fmath){
 
 /*\
  * Chart
@@ -47,8 +47,19 @@ function Chart(config)
 			return bt;
 		}
 	}
+	var fy_config=
+	{
+		init_size: 20,
+		batch_size: 10,
+		max_size: 100,
+		construct: function()
+		{
+			return new Beat( 'flyer', config.beat, config.fly.div, config.fly);
+		}
+	}
 	this.bars = new Fset(br_config);
 	this.beats = new Fset(bt_config);
+	this.flyers = new Fset(fy_config);
 
 	//marks
 	this.marks=[];
@@ -73,6 +84,14 @@ function Chart(config)
 		mark_ani.set_frame(config.mark.line[i]);
 		mark_sp.set_xy({ x:0, y:config.lineheight*i });
 		this.marks.push(mark_sp);
+		
+		//text
+		if( config.mark.text)
+		{
+			config.mark.text[i];
+			var sym = create_element('span',null,'marktext',config.mark.text[i],mark_sp.el);
+			sym.style.lineHeight = config.mark.h+'px';
+		}
 	}
 	
 	//hitmark
@@ -85,7 +104,7 @@ function Chart(config)
 		{
 			var hitmark_sp_config=
 			{
-				canvas: $('marks'),
+				canvas: $('hitmarks'),
 				wh: {x:config.hitmark.w, y:config.hitmark.h},
 				img: config.hitmark.img
 			}
@@ -109,6 +128,7 @@ function Chart(config)
 	this.lasttime = 0; //serve to calculate the time difference between frames
 	this.lastbar = 0; //time when last bar is born
 	this.beatcursor = 0; //the array index on `data.beats` of the lastest not-yet-born beat
+	this.lycursor = 0;
 	this.hitmarkout = 0;
 }
 
@@ -141,9 +161,23 @@ Chart.prototype.frame=function(time)
 		for( var k=this.beatcursor; k<j; k++)
 		{
 			var res=config.ondata(data.beats[k].v);
-			this.beats.create(config.width, res.y, res.frame, res.hitframe);
+			this.beats.create(config.width, res.y, data.beats[k].v, res.frame, res.hitframe);
 		}
 		this.beatcursor=j;
+	}
+	//lyrics
+	for( var j=this.lycursor, lylength=data.lyrics.length; j<lylength; j++)
+	{
+		if( time < data.lyrics[j].t)
+			break;
+	}
+	if( j>this.lycursor)
+	{
+		for( var k=this.lycursor; k<j; k++)
+		{
+			$('lyrics').innerHTML = data.lyrics[k].v;
+		}
+		this.lycursor=j;
 	}
 	
 	//hitmarkout
@@ -158,6 +192,7 @@ Chart.prototype.frame=function(time)
 	var diff= (time-this.lasttime)*config.timescale;
 	this.bars .call_each('frame', diff);
 	this.beats.call_each('frame', diff);
+	this.flyers.call_each('frame', diff);
 	
 	//wrap up
 	this.lasttime = time;
@@ -167,7 +202,7 @@ Chart.prototype.frame=function(time)
  [ method ]
  * use a timer to test run the chart
 \*/
-Chart.prototype.test_run=function(slow)
+Chart.prototype.test_run=function(slow,cancel_on_0)
 {
 	var This=this;
 	var begintime = new Date().getTime()/1000 + this.config.width/this.config.timescale + 1;
@@ -179,8 +214,23 @@ Chart.prototype.test_run=function(slow)
 			time += slow;
 		else
 			time = new Date().getTime()/1000-begintime; //time in sec
+		if( time>=0 && cancel_on_0)
+		{
+			clearInterval(clock);
+			cancel_on_0();
+			return ;
+		}
 		This.frame(time);
 	}, 1000/45);
+}
+/*\
+ * Chart.pre_run
+ [ method ]
+ * run from negative time (depends on width of chart) and callback when time==0
+\*/
+Chart.prototype.pre_run=function(callback)
+{
+	this.test_run(null,callback);
 }
 /*\
  * Chart.hit
@@ -210,7 +260,7 @@ Chart.prototype.hit=function(line)
 			}
 			//onhit
 			if( This.config.onhit)
-			if( This.config.onhit(dist))
+			if( This.config.onhit(K.id,dist))
 				K.clear();
 			return 'break';
 		}
@@ -227,10 +277,10 @@ Chart.prototype.missed=function()
 		this.config.onmiss();
 }
 
-function Beat(type,config,holder)
+function Beat(type,config,holder,fy_config)
 {
 	this.type=type;
-	if( type==='beat')
+	if( type==='beat' || type==='flyer')
 	{
 		var sp_config=
 		{
@@ -259,18 +309,37 @@ function Beat(type,config,holder)
 			this.width = 1000;
 		this.die();
 	}
+	if( type==='flyer')
+	{
+		this.fy_config=fy_config;
+	}
 }
-Beat.prototype.born=function(x,y,frame,hitframe)
+Beat.prototype.born=function(x,y,id,frame,hitframe)
 {
 	set_xy(this.el, x, y);
-	if( this.ani && frame!==undefined)
-		this.ani.set_frame(frame);
-	if( hitframe!==undefined)
-		this.hitframe = hitframe;
+	show(this.el);
+	if( this.type==='beat')
+	{
+		if( id)
+			this.id=id;
+		if( this.ani && frame!==undefined)
+			this.ani.set_frame(frame);
+		if( hitframe!==undefined)
+			this.hitframe = hitframe;
+	}
+	if( this.type==='flyer')
+	{
+		var A = {x:x, y:y};
+		var B = this.fy_config.to;
+		var C = {x:(A.x+B.x)/2, y:A.y-this.fy_config.height};
+		this.curve = Fmath.bezier2(A,C,B,this.fy_config.steps);
+		this.curve.I = 0;
+		this.ani.set_frame(hitframe);
+	}
 }
 Beat.prototype.die=function()
 {
-	set_xy(this.el, -1000);
+	hide(this.el);
 	
 	if( this.type==='beat')
 	{
@@ -282,13 +351,35 @@ Beat.prototype.die=function()
 }
 Beat.prototype.frame=function(speed)
 {
-	move_xy(this.el, -speed);
-	if( get_xy(this.el).x < -this.width)
-		this.parent.die();
+	if( this.type==='bar' || this.type==='beat')
+	{
+		move_xy(this.el, -speed);
+		if( get_xy(this.el).x < -this.width)
+			this.parent.die();
+	}
+	if( this.type==='flyer')
+	{
+		if( this.curve.I < this.curve.length/2)
+		{
+			set_xy(this.el, this.curve[this.curve.I].x, this.curve[this.curve.I].y);
+			this.curve.I++;
+		}
+		else
+		{
+			this.curve=null;
+			this.parent.die();
+			return ;
+		}
+	}
 }
-Beat.prototype.hit=function()
+Beat.prototype.hit=function(fly)
 {
-	this.ani.set_frame(this.hitframe);
+	if( this.type==='beat')
+	{
+		var A=get_xy(this.el);
+		this.chart.flyers.create(A.x,A.y,null,null,this.hitframe);
+		hide(this.el);
+	}
 }
 Beat.prototype.clear=function()
 {
@@ -344,6 +435,14 @@ function round(v,d)
 function $(id)
 {
 	return document.getElementById(id);
+}
+function show(el)
+{
+	el.style.display='';
+}
+function hide(el)
+{
+	el.style.display='none';
 }
 
 return Chart;

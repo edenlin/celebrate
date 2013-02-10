@@ -265,8 +265,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="314.05639"
-     inkscape:cy="303.02069"
+     inkscape:cx="585.58539"
+     inkscape:cy="519.39537"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -298,9 +298,9 @@
        height="105.3891"
        x="49.762669"
        y="563.38733"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark.png"
-       inkscape:export-xdpi="57.671375"
-       inkscape:export-ydpi="57.671375" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark-small.png"
+       inkscape:export-xdpi="46.1371"
+       inkscape:export-ydpi="46.1371" />
     <path
        sodipodi:type="arc"
        style="fill:url(#radialGradient4181);fill-opacity:1.0;fill-rule:evenodd;stroke:none"
@@ -311,14 +311,14 @@
        sodipodi:ry="263.04373"
        d="m 551.5433,810.53168 a 263.04373,263.04373 0 1 1 -526.087459,0 263.04373,263.04373 0 1 1 526.087459,0 z"
        transform="matrix(0.53394529,0,0,0.53394529,36.170641,183.72624)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark.png"
-       inkscape:export-xdpi="57.671375"
-       inkscape:export-ydpi="57.671375" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark-small.png"
+       inkscape:export-xdpi="46.1371"
+       inkscape:export-ydpi="46.1371" />
     <g
        id="g4311"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019"
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412"
        transform="matrix(0.53394529,0,0,0.53394529,23.192125,106.07161)">
       <g
          transform="translate(69.296464,-186.67619)"
@@ -502,9 +502,9 @@
        x="59.26683"
        y="303.25751"
        ry="0.84004283"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412" />
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#834539;stroke-width:6.5454545;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -515,9 +515,9 @@
        sodipodi:ry="84.852814"
        d="m 224.15285,314.1427 a 84.852814,84.852814 0 1 1 -169.70563,0 84.852814,84.852814 0 1 1 169.70563,0 z"
        transform="matrix(0.48944985,0,0,0.48944985,45.61668,204.03065)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412" />
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#834539;stroke-width:2.9032259;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -528,9 +528,9 @@
        sodipodi:ry="84.852814"
        d="m 224.15285,314.1427 a 84.852814,84.852814 0 1 1 -169.70563,0 84.852814,84.852814 0 1 1 169.70563,0 z"
        transform="matrix(0.55174345,0,0,0.55174345,36.939179,184.46157)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412" />
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#ac6a00;stroke-width:6.5454545;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -541,9 +541,9 @@
        sodipodi:ry="84.852814"
        d="m 224.15285,314.1427 a 84.852814,84.852814 0 1 1 -169.70563,0 84.852814,84.852814 0 1 1 169.70563,0 z"
        transform="matrix(0.48944985,0,0,0.48944985,154.6586,204.03065)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412" />
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#ac6a00;stroke-width:2.9032259;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -554,9 +554,9 @@
        sodipodi:ry="84.852814"
        d="m 224.15285,314.1427 a 84.852814,84.852814 0 1 1 -169.70563,0 84.852814,84.852814 0 1 1 169.70563,0 z"
        transform="matrix(0.55174345,0,0,0.55174345,145.9811,184.46157)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect4223-7"
@@ -565,9 +565,9 @@
        x="168.30876"
        y="303.25751"
        ry="0.84004283"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats.png"
-       inkscape:export-xdpi="57.778019"
-       inkscape:export-ydpi="57.778019" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/beats-small.png"
+       inkscape:export-xdpi="46.222412"
+       inkscape:export-ydpi="46.222412" />
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#834539;stroke-width:2.9032259;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -578,15 +578,15 @@
        sodipodi:ry="84.852814"
        d="m 224.15285,314.1427 a 84.852814,84.852814 0 1 1 -169.70563,0 84.852814,84.852814 0 1 1 169.70563,0 z"
        transform="matrix(0.55174345,0,0,0.55174345,113.35575,443.17964)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark.png"
-       inkscape:export-xdpi="57.671375"
-       inkscape:export-ydpi="57.671375" />
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark-small.png"
+       inkscape:export-xdpi="46.1371"
+       inkscape:export-ydpi="46.1371" />
     <g
        id="g4545"
        transform="matrix(0.66020155,0,0,0.66020155,20.111334,112.35333)"
-       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark.png"
-       inkscape:export-xdpi="57.671375"
-       inkscape:export-ydpi="57.671375">
+       inkscape:export-filename="/mnt/sdb2/F/celebrate/src/mark-small.png"
+       inkscape:export-xdpi="46.1371"
+       inkscape:export-ydpi="46.1371">
       <path
          inkscape:transform-center-y="1.285534"
          inkscape:transform-center-x="-147.32821"

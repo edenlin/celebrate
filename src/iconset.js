@@ -1,12 +1,4 @@
-requirejs.config({
-	baseUrl: '../../',
-	paths: {
-		'cele':'celebrate/src',
-		'third_party':'celebrate/third_party'
-	}
-});
-
-requirejs(['cele/musician','cele/drumset'],function(Mgroup,Drumset)
+define(['cele/musician','cele/drumset'],function(Mgroup,Drumset)
 {
 	var musi={};
 	var GROUP = $('musicians').getElementsByClassName('group');
@@ -22,13 +14,17 @@ requirejs(['cele/musician','cele/drumset'],function(Mgroup,Drumset)
 			onhit:onhit
 		});
 
-	function onhit(id)
+	function onhit(ID)
 	{
-		if( musi[id])
-			musi[id].onhit();
+		for( var i=0; i<ID.length; i++)
+		{
+			var id=ID[i];
+			if( musi[id])
+				musi[id].onhit();
+		}
 	}
 
-	setInterval(frame,1000/10);
+	var timer = setInterval(frame,1000/10);
 	function frame()
 	{
 		for( var i in musi)
@@ -38,11 +34,17 @@ requirejs(['cele/musician','cele/drumset'],function(Mgroup,Drumset)
 		var ot=this.time;
 		this.time=new Date().getTime();
 		var diff=this.time-ot;
-		$('fps').value = Math.round(1000/diff)+'fps';
+		//$('fps').value = Math.round(1000/diff)+'fps';
 	}
 
 	function $(id)
 	{
 		return document.getElementById(id);
+	}
+
+	return {
+		musi: musi,
+		drumset: drumset,
+		timer: timer
 	}
 });

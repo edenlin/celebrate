@@ -1,10 +1,18 @@
-define(['cele/gamedata','cele/chart','cele/sound'],
-function(gamedata,Chart,create_sound){
+requirejs.config({
+	baseUrl: '../../',
+	paths: {
+		'cele':'celebrate/src',
+		'third_party':'celebrate/third_party'
+	}
+});
+
+requirejs(['cele/gamedata','cele/chart','cele/sound','cele/iconset'],
+function(gamedata,Chart,create_sound,iconset){
 
 var chart_config=
 {
 	div: $('chart'),	//chart element
-	width: 1000,		//width in px
+	width: 900,		//width in px
 	timescale: 300,		//length in pixels representing one second
 	block: { w:50, h:50}, //size of a block
 	lineheight: 70,		//line height
@@ -31,6 +39,11 @@ var chart_config=
 		0,
 		0,
 		1],
+		text:[ //display symbol of each line
+		'v',
+		'b',
+		'_'
+		],
 		centerx: 70/2, centery: 70/2
 	},
 	hitmark:	//mark when a proper beat is being hit
@@ -44,9 +57,73 @@ var chart_config=
 		frame: 0,
 		showtime: 0.1
 	},
+	fly:	//fly away after being hit
+	{
+		to:
+		{
+			x: 500, y: -10
+		},
+		height: 200,
+		steps: 12,
+		div: $('flyers')
+	},
 	onhit: onhit,
 	onmiss: onmiss
 }
+var judge=
+{
+	perfect: 15,
+	good: 30,
+	bad: 45
+}
+var scoring=
+{
+	perfect: 3,
+	good: 2,
+	bad: 1,
+	miss: -1
+}
+var score=
+{
+	total: 0,
+	perfect: 0,
+	good: 0,
+	bad: 0,
+	miss: 0,
+	fault_presses: 0,
+	max_cont_perfect: 0,
+	max_cont_good: 0,
+	max_cont_bad: 0,
+	max_cont_miss: 0
+}
+
+//smaller
+var smaller = 0.8;
+chart_config.block.w *= smaller;
+chart_config.block.h *= smaller;
+chart_config.lineheight *= smaller;
+chart_config.timescale *= smaller;
+chart_config.beat.w *= smaller;
+chart_config.beat.h *= smaller;
+chart_config.beat.centerx *= smaller;
+chart_config.beat.centery *= smaller;
+chart_config.beat.dist *= smaller;
+chart_config.mark.y *= smaller;
+chart_config.mark.w *= smaller;
+chart_config.mark.h *= smaller;
+chart_config.mark.centerx *= smaller;
+chart_config.mark.centery *= smaller;
+chart_config.hitmark.w *= smaller;
+chart_config.hitmark.h *= smaller;
+chart_config.hitmark.centerx *= smaller;
+chart_config.hitmark.centery *= smaller;
+chart_config.hitmark.dist *= smaller;
+chart_config.beat.img = 'beats-small.png';
+chart_config.mark.img = 'beats-small.png';
+chart_config.hitmark.img = 'mark-small.png';
+judge.perfect *= smaller;
+judge.good *= smaller;
+judge.bad *= smaller;
 
 function ondata(v)
 {
@@ -88,16 +165,17 @@ function ondata(v)
 	return res;
 }
 
-function onhit(dist)
+function onhit(id,dist)
 {
 	//hit message
 	var mess;
 	var showtime = 0.2;
-	if( dist <= 15)
+	var extended=1;
+	if( dist <= judge.perfect)
 		mess = 'perfect';
-	else if( dist <= 30)
+	else if( dist <= judge.good)
 		mess = 'good';
-	else if( dist <= 45)
+	else if( dist <= judge.bad)
 		mess = 'bad';
 	else
 		mess = 'miss';
@@ -112,23 +190,40 @@ function onhit(dist)
 		lastmessage.count = 0;
 		$('hitcount').innerHTML = '';
 	}
+	//
+	score[mess] += 1;
+	score.total += scoring[mess];
+	if( lastmessage.count > score['max_cont_'+mess])
+		score['max_cont_'+mess] = lastmessage.count;
+	$('currentscore').innerHTML = '<span class="green">'+score.total+'</span>';
+	//
+	if( lastmessage.count > 10)
+		extended = 2;
+	else if( lastmessage.count > 20)
+		extended = 5;
 	$('hitcount').className = $(mess).className;
 	lastmessage.mess = mess;
+	//
 	show($(mess));
 	show($('hitcount'));
 	$('hitmessage').className = 'pop';
+	$('currentscore').className = 'pop';
 	setTimeout(function()
 	{
 		$('hitmessage').className = '';
+		$('currentscore').className = '';
 	}, 1000*showtime/6);
 	setTimeout(function()
 	{
 		hide($(mess));
 		hide($('hitcount'));
-	}, 1000*showtime);
-	
-	if( dist <= 45)
+	}, 1000*showtime*extended);
+
+	if( dist <= judge.bad)
+	{
+		iconset.drumset.hit(iconset.drumset.key[id.slice(1)]);
 		return true; //return true to mark the beat as `cleared`
+	}
 }
 function onmiss()
 {
@@ -144,8 +239,12 @@ hide($('perfect'));
 hide($('good'));
 hide($('bad'));
 hide($('miss'));
+hide($('scoreboard'));
 
 var music;
+var paused = false;
+var chart = new Chart(chart_config);
+
 create_sound.ready(function()
 {
 	music = create_sound('../music/Jubilant',
@@ -153,12 +252,41 @@ create_sound.ready(function()
 		timeupdate: function(t)
 		{
 			chart.frame(t);
+		},
+		ended: function()
+		{
+			document.removeEventListener("keydown", keydown, true);
+	$('scoreboard').innerHTML = 
+	'<span style="font-size: 40px;">Score: '+score.total+'</span><br>'+
+	'Perfect: '+score.perfect+', '+'Good: '+score.good+', '+'Bad: '+score.bad+','+'Miss: '+score.miss+'<br>'+
+	'max. cont. Perfect: '+score.max_cont_perfect+'<br>'+
+	'max. cont. Good: '+score.max_cont_good+'<br>'+
+	'max. cont. Bad: '+score.max_cont_bad+'<br>'+
+	'max. cont. Miss: '+score.max_cont_miss+'<br>';
+	show($('scoreboard'));
+		},
+		loaded: function()
+		{
+			$('start').className = 'bigbutton';
+			$('start').innerHTML = 'Start';
 		}
 	});
-	music.play();
 });
 
-var chart = new Chart(chart_config);
+$('start').onclick=function()
+{
+	if( this.innerHTML==='Start')
+	{
+		hide($('start'));
+		$('musicians').className = 'gamestarted';
+		iconset.drumset.removeEventListener();
+		chart.pre_run(function()
+		{
+			music.play();
+			//music.setTime(59);
+		});
+	}
+}
 
 document.addEventListener("keydown", keydown, true);
 function keydown(e)
@@ -175,12 +303,16 @@ function keydown(e)
 		chart.hit(1);
 		return true;
 	
-	case ' ':
+	case ' ': /* IE9? */
 		chart.hit(2);
 		return true;
 	
 	case 'p':
-		music.pause();
+		if( paused)
+			music.play();
+		else
+			music.pause();
+		paused = !paused;
 		return true;
 	}
 }
