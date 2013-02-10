@@ -27,6 +27,7 @@ If you download the repository to local space, the default SoundManager2 will no
 
 ### drumset.js
 - [example](http://tyt2y3.github.com/celebrate/src/drumset.html)
+
 `drumset` binds data to HTML. the reason is the individual `div`s can be styled freely via CSS.
 ```
 <div id='drumset'>
