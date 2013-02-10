@@ -20,8 +20,8 @@ If you download the repository to local space, the default SoundManager2 will no
 - First you need to run your music in an analyzer to extract the waveform of the music.
 - A simple [analyzer](http://tyt2y3.github.com/celebrate/demo/analyzer.html) is provided but only runs in Firefox.
 - Then click `open music` in composer and specify the waveform file (in JSONP) and music file (in mp3,ogg or wav).
-	 > subject to cross origin resource limitation, it may or may not work if you load a file on other domains.
-	 > This repository is not a suitable place to host copyrighted material for you.
+> subject to cross origin resource limitation, it may or may not work if you load a file on other domains.
+> This repository is not a suitable place to host copyrighted material for you.
 
 ## architectural components
 
