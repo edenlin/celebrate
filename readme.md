@@ -26,7 +26,7 @@ If you download the repository to local space, the default SoundManager2 will no
 ## architectural components
 
 ### drumset.js
-- [example](http://tyt2y3.github.com/celebrate/src/drumset.html)
+[example](http://tyt2y3.github.com/celebrate/src/drumset.html)
 
 `drumset` binds data to HTML. the reason is the individual `div`s can be styled freely via CSS.
 ```
@@ -73,5 +73,5 @@ var chart_config=
 <img src="http://2.bp.blogspot.com/-k-My1B-YlaU/T8JUBAYpu9I/AAAAAAAAACI/OnCvkzFF5jw/s1600/logo_l1_s.png" height="80"/>
 celebrate is a member of [Project F](http://tyt2y3.github.com/F.core) games.
 
-## License
+### License
 [License of Project F](http://project--f.blogspot.hk/2012/05/license.html). In short, everything except commercial use is allowed.
