@@ -62,9 +62,15 @@ define(['cele/drum'],function()
 			}
 			if( config.progress)
 			{
-				sound.bind('progress',function(x)
+				sound.bind('progress',function()
 				{
-					config.progress(x);
+					var total = 0;
+					var buffered = sound.getBuffered();
+					for( var i=0; i<buffered.length; i++)
+					{
+						total += buffered[i].end-buffered[i].start;
+					}
+					return Math.round(total/sound.getDuration()*100);
 				});
 			}
 			var obj=

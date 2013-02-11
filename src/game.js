@@ -6,8 +6,8 @@ requirejs.config({
 	}
 });
 
-requirejs(['cele/gamedata','cele/chart','cele/sound','cele/iconset'],
-function(gamedata,Chart,create_sound,iconset){
+requirejs(['F.core/controller','F.core/controller-changer','cele/gamedata','cele/chart','cele/sound','cele/iconset'],
+function(Fcontroller,Fcontroller_changer,gamedata,Chart,create_sound,iconset){
 
 var chart_config=
 {
@@ -98,6 +98,7 @@ var score=
 }
 
 //smaller
+// so that we can arbitrarily scale the sizes
 var smaller = 0.8;
 chart_config.block.w *= smaller;
 chart_config.block.h *= smaller;
@@ -230,20 +231,23 @@ function onmiss()
 	onhit(1000);
 }
 
-var lastmessage=
-{
-	mess: '',
-	count: 0
-}
 hide($('perfect'));
 hide($('good'));
 hide($('bad'));
 hide($('miss'));
 hide($('scoreboard'));
+hide($('keychanger'));
+hide($('loadingprogress-holder'));
 
+var lastmessage=
+{
+	mess: '',
+	count: 0
+}
 var music;
 var paused = false;
 var chart = new Chart(chart_config);
+var controller;
 
 create_sound.ready(function()
 {
@@ -269,6 +273,12 @@ create_sound.ready(function()
 		{
 			$('start').className = 'bigbutton';
 			$('start').innerHTML = 'Start';
+			hide($('loadingprogress-holder'));
+		},
+		progress: function(per)
+		{
+			show($('loadingprogress-holder'));
+			$('loadingprogress').style.width = per+'%';
 		}
 	});
 });
@@ -279,6 +289,7 @@ $('start').onclick=function()
 	{
 		hide($('start'));
 		hide($('instruction'));
+		hide($('keychanger'));
 		$('musicians').className = 'gamestarted';
 		iconset.drumset.removeEventListener();
 		chart.pre_run(function()
@@ -289,6 +300,7 @@ $('start').onclick=function()
 	}
 }
 
+/*
 var controlmap=
 {
 	'v':0,
@@ -317,6 +329,60 @@ function keydown(e)
 		paused = !paused;
 		return true;
 	}
+} */
+var controller_config=
+{
+	'0': 'v',
+	'1': 'b',
+	'2': 'space',
+	'pause': 'p'
+}
+controller = new Fcontroller(controller_config);
+controller.child.push({
+	key:function (line,down)
+	{
+		if(!down)
+			return;
+		switch (line)
+		{
+			case '0':
+				chart.hit(0);
+			break;
+			case '1':
+				chart.hit(1);
+			break;
+			case '2':
+				chart.hit(2);
+			break;
+			case 'pause':
+				if( paused)
+					music.play();
+				else
+					music.pause();
+				paused = !paused;
+			break;
+		}
+	}
+});
+new Fcontroller_changer(
+{
+	div: $('keychanger'),
+	controller: controller,
+	onchange: function(con,key,keyname,keycode)
+	{
+		var el = chart.marks[key].el;
+		var label = el.getElementsByClassName('marktext');
+		if( label)
+			label = label[0];
+		else
+			return;
+		if( label)
+			label.innerHTML = keyname;
+	}
+});
+$('changekey').onclick=function()
+{
+	show($('keychanger'));
 }
 
 //helpers

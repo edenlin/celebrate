@@ -13,10 +13,7 @@ This project comes with a modest but powerful [beat composer](http://tyt2y3.gith
 
 This composer can be easily configured to support other music instrument sounds. This code base is a generic framework for any rhythm game.
 
-If you download the repository to local space, the default SoundManager2 will not work because of security. read [details here](http://www.schillmania.com/projects/soundmanager2/doc/getstarted/) in the Live Debug Output session, or a quote:
-- If loading from the local filesystem (offline eg. file://, not over HTTP), Flash security is likely preventing SM2 from talking to Javascript. You will need to add this project's directory to the trusted locations in the [Flash global security settings panel](http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html), or simply view this page over HTTP.
-
-## add you own music into [composer](http://tyt2y3.github.com/celebrate/src/editor.html)
+### add you own music into [composer](http://tyt2y3.github.com/celebrate/src/editor.html)
 - First you need to run your music in an analyzer to extract the waveform of the music.
 - A simple [analyzer](http://tyt2y3.github.com/celebrate/demo/analyzer.html) is provided but only runs in Firefox.
 - Then click `open music` in composer and specify the waveform file (in JSONP) and music file (in mp3,ogg or wav).
@@ -24,7 +21,9 @@ If you download the repository to local space, the default SoundManager2 will no
 > subject to cross origin resource limitation, it may or may not work if you load a file on other domains.
 > This repository is not a suitable place to host copyrighted material for you.
 
-## architectural components
+## development
+
+### components
 
 ### drumset.js
 [example](http://tyt2y3.github.com/celebrate/src/drumset.html)

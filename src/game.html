@@ -331,6 +331,20 @@ _gaq.push(['_trackPageview']);
 	color: #007432;
 	text-shadow: 0px 0px 10px #AAA;
 }
+#changekey
+{
+	cursor: pointer;
+	color: blue;
+	text-decoration: underline; 
+}
+#keychanger
+{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	background: #FFF;
+	border: 1px solid #AAA;
+}
 /*-----visuals-----*/
 .bigbutton {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f6b33d), color-stop(1, #d29105) );
@@ -462,15 +476,18 @@ _gaq.push(['_trackPageview']);
 </div>
 
 <div id='chart'>
-	<!--
+
 	<div id='loadingprogress-holder'>
 		<div id='loadingprogress'>
 		</div>
 	</div>
-	-->
 	<button id='start'>loading...</button>
-	<div id='instruction'>dont worry, when the game starts, just use 'v','b' and space to hit the incoming beats. <a target="_blank" href="https://github.com/tyt2y3/celebrate#celebrate">information</a>.
+	<div id='instruction'>
+		use 'v','b' and space to hit the incoming beats or <a id='changekey'>change key</a>. 
+		<a href="?HTML5">sound problem.</a> 
+		<a target="_blank" href="https://github.com/tyt2y3/celebrate#celebrate">information</a>.
 	</div>
+	<div id='keychanger'></div>
 	<!-- to be created by game.js
 	<div id='rules'>
 		<div></div>
