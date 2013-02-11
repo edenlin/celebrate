@@ -259,7 +259,6 @@ create_sound.ready(function()
 		},
 		ended: function()
 		{
-			document.removeEventListener("keydown", keydown, true);
 	$('scoreboard').innerHTML = 
 	'<span style="font-size: 40px;">Score: '+score.total+'</span><br>'+
 	'Perfect: '+score.perfect+', '+'Good: '+score.good+', '+'Bad: '+score.bad+','+'Miss: '+score.miss+'<br>'+
@@ -295,7 +294,7 @@ $('start').onclick=function()
 		chart.pre_run(function()
 		{
 			music.play();
-			//music.setTime(59);
+			music.setTime(215);
 		});
 	}
 }
