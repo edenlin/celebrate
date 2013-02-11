@@ -294,7 +294,6 @@ $('start').onclick=function()
 		chart.pre_run(function()
 		{
 			music.play();
-			music.setTime(215);
 		});
 	}
 }
