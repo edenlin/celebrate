@@ -361,7 +361,15 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 						playback_map();
 					}
 				},
-				timeupdate: timeupdate
+				timeupdate: timeupdate,
+				loaded: function()
+				{
+					$('pause').innerHTML='[p] play';
+				},
+				progress: function(per)
+				{
+					$('pause').innerHTML = 'loading '+per+'%';
+				}
 			});
 	}
 	function timeupdate(t)
@@ -460,7 +468,6 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 
 	// seeker controls
 	paused=true;
-	$('pause').innerHTML='[p] play';
 	$('pause').onclick=function()
 	{
 		if( this.innerHTML==='[p] pause')
@@ -471,7 +478,7 @@ requirejs(['cele/drumset','cele/sound'], function(Drumset,create_sound)
 			if( record.ing)
 				$('record').onclick();
 		}
-		else
+		else if( this.innerHTML==='[p] play')
 		{
 			mysound.play();
 			paused=false;
