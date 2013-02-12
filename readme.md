@@ -38,9 +38,8 @@ __celebrate__ is built with the best practices in web application development, i
 >	celebrate/
 > ```
 
-If you download the repository to local space, the default SoundManager2 will not work because of security. read details here in the Live Debug Output session, or a quote:
-
-If loading from the local filesystem (offline eg. file://, not over HTTP), Flash security is likely preventing SM2 from talking to Javascript. You will need to add this project's directory to the trusted locations in the Flash global security settings panel, or simply view this page over HTTP.
+If you download the repository to local space, the default SoundManager2 will not work because of security. read [details here](http://www.schillmania.com/projects/soundmanager2/doc/getstarted/) in the Live Debug Output session, or a quote:
+- If loading from the local filesystem (offline eg. file://, not over HTTP), Flash security is likely preventing SM2 from talking to Javascript. You will need to add this project's directory to the trusted locations in the [Flash global security settings panel](http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html), or simply view this page over HTTP.
 
 ### components
 
