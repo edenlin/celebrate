@@ -87,19 +87,19 @@ var chart_config=
 ### third party
 __celebrate__ is built upon the following js libraries:
 
-#### file saver
-BlobBuilder.js
-FileSaver.js
-#### persistent storage
-persist-min.js
-#### module loaders
-head.load.min.js
-require.js, r.js
-#### audio
-buzz.js
-soundmanager2-nodebug-jsmin.js
-#### array extensions
-sugar-1.3.8-custom.min.js
+- file saver
+	BlobBuilder.js
+	FileSaver.js
+- persistent storage
+	persist-min.js
+- module loaders
+	head.load.min.js
+	require.js, r.js
+- audio
+	buzz.js
+	soundmanager2-nodebug-jsmin.js
+- array extensions
+	sugar-1.3.8-custom.min.js
 
 ## samples
 [`analyzer.html`](http://tyt2y3.github.com/celebrateanalyzer.html)	[`SM2_player.html`](http://tyt2y3.github.com/celebrateSM2_player.html)	[`buzz_player.html`](http://tyt2y3.github.com/celebratebuzz_player.html)	[`sugar.html`](http://tyt2y3.github.com/celebratesugar.html)	[`waveform.html`](http://tyt2y3.github.com/celebratewaveform.html)	[`filesave.html`](http://tyt2y3.github.com/celebratefilesave.html)	[`waveform-player.html`](http://tyt2y3.github.com/celebratewaveform-player.html)	[`editor.html`](http://tyt2y3.github.com/celebrateeditor.html)	[`drumset.html`](http://tyt2y3.github.com/celebratedrumset.html)	[`game.html`](http://tyt2y3.github.com/celebrategame.html)	[`iconset.html`](http://tyt2y3.github.com/celebrateiconset.html)	[`iconset2.html`](http://tyt2y3.github.com/celebrateiconset2.html)	[`shapes.html`](http://tyt2y3.github.com/celebrateshapes.html)	[`index.html`](http://tyt2y3.github.com/celebrateindex.html)	[`game.html`](http://tyt2y3.github.com/celebrategame.html)	
