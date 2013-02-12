@@ -160,7 +160,7 @@ define(['cele/drum'],function()
 					else
 					{
 						if( config.progress)
-							config.progress(this.bytesLoaded/this.bytesTotal*100);
+							config.progress(Math.round(this.bytesLoaded/this.bytesTotal*100));
 					}
 				}
 			}
