@@ -29,7 +29,7 @@ __celebrate__ is built with the best practices in web application development, i
 - an up-to-date browser
 - [git](http://git-scm.com/)
 - [node.js](http://nodejs.org/)
-- [F.core repository](https://github.com/tyt2y3/F.core) install with celebrate side by side
+- [F.core repository](https://github.com/tyt2y3/F.core) install with celebrate side by side, the folder must be named `F.core`
 
 > something like
 > ```
