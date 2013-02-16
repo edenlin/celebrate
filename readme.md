@@ -41,12 +41,13 @@ which follows the format of [drumset.js](#drumsetjs), see [drumset.html](http://
 - A simple [analyzer](http://tyt2y3.github.com/celebrate/demo/analyzer.html) is provided but only runs in Firefox.
 - Then click `open music` in composer and specify the waveform file (in JSONP) and music file (in mp3,ogg or wav).
 
-> subject to cross origin resource limitation, it may or may not work if you load a file on other domains.
+> subject to cross origin resource limitation, it may or may not work if you load a file from other domains.
+> which means you can either work on a local file system or host the entire application on your server for other users.
 > This repository is not a suitable place to host copyrighted material for you.
 
 ## development
 
-This code base is a generic framework for any rhythm game.
+This code base is a generic framework for any rhythm game. This is not a full-featured game engine though, but will be a good starting point for you to create your own rhythm game. It is already the best I can offer for free with my limited time.
 
 ### Toolchains
 __celebrate__ is built with the best practices in web application development, including versioning control, compile-free rapid development, compile-time scripts optimization and automatic build process. So you'll need to be familiar with these tools (luckily, they are not hard to learn).
@@ -123,7 +124,7 @@ I did not invent the game. the game mode refers to a famous rhythm game Taiko. t
 ### drum sounds
 the drum sounds are from [Acoustic drumkit example sounds](http://www.akaipro.com/)
 
-### third party libraries
+### libraries
 __celebrate__ is built upon the following javascript libraries:
 
 - file saver
