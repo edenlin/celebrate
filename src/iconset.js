@@ -45,6 +45,7 @@ define(['cele/musician','cele/drumset'],function(Mgroup,Drumset)
 	return {
 		musi: musi,
 		drumset: drumset,
-		timer: timer
+		timer: timer,
+		hit: onhit
 	}
 });

@@ -19,7 +19,7 @@ var chart_config=
 	lines: 3,			//number of lines
 	basebeat: 2,		//interval of basebeat in seconds, visualized by bars
 	data: gamedata,		//data object exported by `editor`
-	ondata: ondata,		//return the y position and sprite frame of a beat
+	ondata: ondata,		//return the y position and sprite frame of a beat when it is created
 	beat:		//animator and sprite config for a beat
 	{
 		x:0, y:0,     //top left margin of the frames
@@ -128,6 +128,7 @@ judge.bad *= smaller;
 
 function ondata(v)
 {
+	v = v.slice(1);
 	var res=
 	{
 		y: 0,
@@ -136,14 +137,14 @@ function ondata(v)
 	}
 	switch(v)
 	{
-		case 'd3': case 'd4': case 'd5': case 'd6': case 'd7': 
-		case 'df': case 'dv': 
+		case '3': case '4': case '5': case '6': case '7': 
+		case 'f': case 'v': 
 		res.frame = 2;
 		res.hitframe = 3;
 		break;
 
-		case 'dr': case 'dt': case 'dy': case 'du':
-		case 'db': case 'dg': case 'dn':
+		case 'r': case 't': case 'y': case 'u':
+		case 'b': case 'g': case 'n':
 		res.frame = 0;
 		res.hitframe = 1;
 		break;
@@ -151,14 +152,14 @@ function ondata(v)
 	var padding = (chart_config.lineheight - chart_config.block.h)/2;
 	switch(v)
 	{
-		case 'dr': case 'dt': case 'dy': case 'du':
+		case 'r': case 't': case 'y': case 'u':
 			res.y = padding;
 		break;
-		case 'dg': case 'db': case 'dn':
+		case 'g': case 'b': case 'n':
 			res.y = chart_config.lineheight + padding;
 		break;
-		case 'd3': case 'd4': case 'd5': case 'd6': case 'd7': 
-		case 'df': case 'dv': 
+		case '3': case '4': case '5': case '6': case '7': 
+		case 'f': case 'v': 
 			res.y = chart_config.lineheight * 2 + padding;
 		break;
 	}
@@ -223,7 +224,29 @@ function onhit(id,dist)
 	if( dist <= judge.bad)
 	{
 		iconset.drumset.hit(iconset.drumset.key[id.slice(1)]);
+		iconset.hit(classify(id.slice(1)));
 		return true; //return true to mark the beat as `cleared`
+	}
+}
+function classify(id)
+{	//return the element ids to animate upon correctly hitting a beat
+	switch (id)
+	{
+		case 'r': case 't': case 'y': case 'u': 
+			return ['banghead1','banghead2','banghead3','banghead4'];
+		case '3': case '4': 
+			return ['g369a','g369b'];
+		case '7': 
+			return ['g369a','g369b','agree'];
+		case '6': case 'g': case 'f': 
+			return ['hoho','hoho2','diulm','hoholm'];
+		case 'b': case 'n': 
+			return ['bouncer1','bouncer2'];
+		case 'v': 
+			return ['bouncerlm'];
+		case '5': 
+			return ['banghead1','banghead2','banghead3','banghead4','g369a','g369b','agree',
+			'hoho','hoho2','diulm','hoholm','bouncer1','bouncer2','bouncerlm'];
 	}
 }
 function onmiss()
@@ -290,7 +313,8 @@ $('start').onclick=function()
 		hide($('instruction'));
 		hide($('keychanger'));
 		$('musicians').className = 'gamestarted';
-		iconset.drumset.removeEventListener();
+		iconset.drumset.removeEventListener(); //disable keyborad capability of drumset
+		iconset.drumset.onhit = null; //we will call `iconset.onhit` manually
 		chart.pre_run(function()
 		{
 			music.play();
