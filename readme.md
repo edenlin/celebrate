@@ -49,8 +49,6 @@ which follows the format of [drumset.js](#drumsetjs), see [drumset.html](http://
 This code base is a generic framework for any rhythm game. This is not a full-featured game engine though, but will be a good starting point for you to create your own rhythm game. It is already the best I can offer for free with my limited time.
 
 ### Toolchains
-__celebrate__ is built with the best practices in web application development, including versioning control, compile-free rapid development, compile-time scripts optimization and automatic build process. So you'll need to be familiar with these tools (luckily, they are not hard to learn).
-
 - an up-to-date browser
 - [git](http://git-scm.com/)
 - [node.js](http://nodejs.org/)
