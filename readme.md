@@ -40,10 +40,7 @@ which follows the format of [drumset.js](#drumsetjs), see [drumset.html](http://
 - First you need to run your music in an analyzer to extract the waveform of the music.
 - A simple [analyzer](http://tyt2y3.github.com/celebrate/demo/analyzer.html) is provided but only runs in Firefox.
 - Then click `open music` in composer and specify the waveform file (in JSONP) and music file (in mp3,ogg or wav).
-
-> subject to cross origin resource limitation, it may or may not work if you load a file from other domains.
-> which means you can either work on a local file system or host the entire application on your server for other users.
-> This repository is not a suitable place to host copyrighted material for you.
+	- subject to cross origin resource limitation, it may or may not work if you load a file from other domains. which means you can either work on a local file system or host the entire application on your server for other users. this repository is not a suitable place to host copyrighted material for you.
 
 ## development
 
@@ -57,12 +54,11 @@ __celebrate__ is built with the best practices in web application development, i
 - [node.js](http://nodejs.org/)
 - [F.core repository](https://github.com/tyt2y3/F.core) install with celebrate side by side, the folder must be named `F.core`
 
-> something like
-> ```
-> F/
->	F.core/
->	celebrate/
-> ```
+```
+F/
+	F.core/
+	celebrate/
+```
 
 If you download the repository to local space, the default SoundManager2 will not work because of security. read [details here](http://www.schillmania.com/projects/soundmanager2/doc/getstarted/) in the Live Debug Output session, or a quote:
 - If loading from the local filesystem (offline eg. file://, not over HTTP), Flash security is likely preventing SM2 from talking to Javascript. You will need to add this project's directory to the trusted locations in the [Flash global security settings panel](http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html), or simply view this page over HTTP.
