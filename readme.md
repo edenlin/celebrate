@@ -8,10 +8,33 @@ Let's celebrate! together with the golden orchestra. [Play now!](http://tyt2y3.g
  - you can append `?HTML5` (upper case) to the end of url to switch to HTML5 audio backend. default backend is flash via SoundManager2.
  - `p` can pause the game
 
-## how to hack
+## beat composer
 This project comes with a modest but powerful [beat composer](http://tyt2y3.github.com/celebrate/src/editor.html).
+![beat composer](http://tyt2y3.github.com/celebrate/web/image/editor.png)
 
-This composer can be easily configured to support other music instrument sounds. This code base is a generic framework for any rhythm game.
+### features
+- seeking on time line
+- live recording and playback of beat sequences
+- fine tune beat position by mouse
+- add, move or delete lyrics
+
+	> while dragging a lyrics or beat element, press `d` on keyboard to delete.
+- layers: beat sequences are recorded to a new layer each time, and that layer can be deleted if it is unsatisfying.
+
+	> tick the checkbox of the layer and a button `delete layer` will appear.
+- autosave current editing work
+
+### changing the drum set
+modifying the drum set is done by editing the HTML section of `editor.html`. find the section
+```
+<div id='drumset'>
+	<div id='dr' key='r' sound='AMB_HTM' radius='35' img='drum.png'><br>&nbsp;&nbsp;&nbsp;r</div>
+	<div id='dt' key='t' sound='AMB_MTM' radius='40' img='drum.png'><br>&nbsp;&nbsp;&nbsp;t</div>
+	<div id='dy' key='y' sound='AMB_FTM2' radius='40' img='drum.png'><br>&nbsp;&nbsp;&nbsp;y</div>
+	<div id='du' key='u' sound='AMB_LTM2' radius='55' img='drum.png'>&nbsp;u</div>
+...
+```
+which follows the same definition of [drumset.html](http://tyt2y3.github.com/celebrate/src/drumset.html)
 
 ### add you own music into [composer](http://tyt2y3.github.com/celebrate/src/editor.html)
 - First you need to run your music in an analyzer to extract the waveform of the music.
@@ -22,6 +45,8 @@ This composer can be easily configured to support other music instrument sounds.
 > This repository is not a suitable place to host copyrighted material for you.
 
 ## development
+
+This code base is a generic framework for any rhythm game.
 
 ### Toolchains
 __celebrate__ is built with the best practices in web application development, including versioning control, compile-free rapid development, compile-time scripts optimization and automatic build process. So you'll need to be familiar with these tools (luckily, they are not hard to learn).
@@ -40,6 +65,8 @@ __celebrate__ is built with the best practices in web application development, i
 
 If you download the repository to local space, the default SoundManager2 will not work because of security. read [details here](http://www.schillmania.com/projects/soundmanager2/doc/getstarted/) in the Live Debug Output session, or a quote:
 - If loading from the local filesystem (offline eg. file://, not over HTTP), Flash security is likely preventing SM2 from talking to Javascript. You will need to add this project's directory to the trusted locations in the [Flash global security settings panel](http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html), or simply view this page over HTTP.
+
+HTML5 backend doesnt have this problem. append `?HTML5` to url, like `editor.html?HTML5`.
 
 ### components
 
@@ -91,7 +118,7 @@ var chart_config=
 ## Acknowledgements
 
 ### idea and sprites
-I did not invent the game. the game mode refers to a famous rhythm game Taiku. the icons are from [HKGolden](forum.hkgolden.com) which in turn derive its icons from an old forum distribution. the idea of all these icons playing together in a celebration is a classic.
+I did not invent the game. the game mode refers to a famous rhythm game Taiku. the icons are from [HKGolden](http://forum.hkgolden.com) which in turn derive its icons from an old forum distribution. the idea of all these icons playing together in a celebration is a classic.
 
 ### drum sounds
 the drum sounds are from [Acoustic drumkit example sounds](http://www.akaipro.com/)
