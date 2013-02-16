@@ -1,6 +1,7 @@
 # Celebrate
 ![screenshot](http://tyt2y3.github.com/celebrate/web/image/cap01.png)
 Let's celebrate! together with the golden orchestra. [Play now!](http://tyt2y3.github.com/celebrate)
+tags: 喜氣洋洋, 高登, 遊戲, 太鼓
 
 ## how to play
  - When not started, press keys on the keyboard according to the labels.
@@ -115,11 +116,33 @@ var chart_config=
 ## Acknowledgements
 
 ### music
-currently the only music in this game is <喜氣洋洋> (literally translates to jubilant) which is a popular cantongese song in 1980s and is still performed today during lunar new year in Hong Kong area.
+currently the only music in this game is <喜氣洋洋> (literally translates to jubilant) which is a popular cantongese song in 1980s and is still performed today during lunar new year in Hong Kong area. for this special reason, __celebrate__ is officially published on the first day of lunar new year on 2013.
+```
 喜氣洋洋
+
 作詞：鄭國江
 作曲：五輪真弓
 編曲：吳智強
+
+齊鼓掌(高歌)　歌聲放今晚開心唱請鼓掌
+齊鼓掌(高歌)　歌聲唱今晚開心唱請欣賞
+
+熱鬧情調盡情又放量人人陶醉
+
+熱情狀雙雙對對共欣賞
+熱烈地彈琴熱烈地唱
+歌聲多奔放個個喜氣洋洋
+飲多杯祝你個個都開心歡暢
+(飲多杯勝0既各位乾杯飲勝)
+喜氣洋洋　洋溢四方
+
+熱熱鬧鬧燈正亮酒正香
+滿室鬢影衣香　愉快暢聚
+我願你0地快樂同分享
+為你快樂歌唱　歡笑莫嫌良夜長
+願你我和唱　愉快渡快樂時光
+渡快樂時光
+```
 
 ### idea and sprites
 I did not invent the game. the game mode refers to a famous rhythm game Taiko. the icons are from [HKGolden](http://forum.hkgolden.com) which in turn derive its icons from an old forum distribution. the idea of all these icons playing together in a celebration is a classic.
