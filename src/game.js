@@ -290,6 +290,7 @@ create_sound.ready(function()
 	'max. cont. Bad: '+score.max_cont_bad+'<br>'+
 	'max. cont. Miss: '+score.max_cont_miss+'<br>';
 	show($('scoreboard'));
+	iconset.drumset.onhit = iconset.hit;
 		},
 		loaded: function()
 		{
