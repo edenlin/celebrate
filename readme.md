@@ -114,6 +114,13 @@ var chart_config=
 
 ## Acknowledgements
 
+### music
+currently the only music in this game is <喜氣洋洋> (literally translates to jubilant) which is a popular cantongese song in 1980s and is still performed today during lunar new year in Hong Kong area.
+喜氣洋洋
+作詞：鄭國江
+作曲：五輪真弓
+編曲：吳智強
+
 ### idea and sprites
 I did not invent the game. the game mode refers to a famous rhythm game Taiko. the icons are from [HKGolden](http://forum.hkgolden.com) which in turn derive its icons from an old forum distribution. the idea of all these icons playing together in a celebration is a classic.
 
