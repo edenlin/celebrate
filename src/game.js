@@ -245,7 +245,7 @@ function classify(id)
 		case 'v': 
 			return ['bouncerlm'];
 		case '5': 
-			return ['g369a','g369b','agree','bouncer1','bouncer2','bouncerlm'];
+			return ['g369a','g369b','bouncer1','bouncer2','bouncerlm','assorted'];
 	}
 }
 function onmiss()
