@@ -140,6 +140,8 @@ __celebrate__ is built upon the following javascript libraries:
 	- soundmanager2-nodebug-jsmin.js
 - array extensions
 	- sugar-1.3.8-custom.min.js
+- sprite animation
+	- [F.core](https://github.com/tyt2y3/F.core)
 
 ## Project F
 <img src="http://2.bp.blogspot.com/-k-My1B-YlaU/T8JUBAYpu9I/AAAAAAAAACI/OnCvkzFF5jw/s1600/logo_l1_s.png" height="80"/>
