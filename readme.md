@@ -25,7 +25,7 @@ This project comes with a modest but powerful [beat composer](http://tyt2y3.gith
 - autosave current editing work
 
 ### changing the drum set
-modifying the drum set is done by editing the HTML section of `editor.html`. find the section
+modification of the drum set is done by editing the HTML section of `editor.html`. find the section
 ```
 <div id='drumset'>
 	<div id='dr' key='r' sound='AMB_HTM' radius='35' img='drum.png'><br>&nbsp;&nbsp;&nbsp;r</div>
@@ -34,7 +34,7 @@ modifying the drum set is done by editing the HTML section of `editor.html`. fin
 	<div id='du' key='u' sound='AMB_LTM2' radius='55' img='drum.png'>&nbsp;u</div>
 ...
 ```
-which follows the same definition of [drumset.html](http://tyt2y3.github.com/celebrate/src/drumset.html)
+which follows the format of [drumset.js](#drumsetjs), see [drumset.html](http://tyt2y3.github.com/celebrate/src/drumset.html) for example.
 
 ### add you own music into [composer](http://tyt2y3.github.com/celebrate/src/editor.html)
 - First you need to run your music in an analyzer to extract the waveform of the music.
@@ -68,7 +68,7 @@ If you download the repository to local space, the default SoundManager2 will no
 
 HTML5 backend doesnt have this problem. append `?HTML5` to url, like `editor.html?HTML5`.
 
-### components
+### Components
 
 ### drumset.js
 [example](http://tyt2y3.github.com/celebrate/src/drumset.html)
@@ -111,14 +111,14 @@ var chart_config=
 `musician` fullfill the visual functionality of a drum element. a `musician` contains a sprite that will play an animation when being `hit`.
 `Mgroup` is a group of musicians. they are the groups you see in [example2](http://tyt2y3.github.com/celebrate/src/iconset.html).
 
-## samples
+### samples
 [`editor.html`](http://tyt2y3.github.com/celebrate/src/editor.html)	[`drumset.html`](http://tyt2y3.github.com/celebrate/src/drumset.html)	[`game.html`](http://tyt2y3.github.com/celebrate/src/game.html)	[`iconset.html`](http://tyt2y3.github.com/celebrate/src/iconset.html)	[`iconset2.html`](http://tyt2y3.github.com/celebrate/src/iconset2.html)	[`shapes.html`](http://tyt2y3.github.com/celebrate/src/shapes.html)	
 [`analyzer.html`](http://tyt2y3.github.com/celebrate/demo/analyzer.html)	[`SM2_player.html`](http://tyt2y3.github.com/celebrate/demo/SM2_player.html)	[`buzz_player.html`](http://tyt2y3.github.com/celebrate/demo/buzz_player.html)	[`sugar.html`](http://tyt2y3.github.com/celebrate/demo/sugar.html)	[`waveform.html`](http://tyt2y3.github.com/celebrate/demo/waveform.html)	[`filesave.html`](http://tyt2y3.github.com/celebrate/demo/filesave.html)	[`waveform-player.html`](http://tyt2y3.github.com/celebrate/demo/waveform-player.html)	
 
 ## Acknowledgements
 
 ### idea and sprites
-I did not invent the game. the game mode refers to a famous rhythm game Taiku. the icons are from [HKGolden](http://forum.hkgolden.com) which in turn derive its icons from an old forum distribution. the idea of all these icons playing together in a celebration is a classic.
+I did not invent the game. the game mode refers to a famous rhythm game Taiko. the icons are from [HKGolden](http://forum.hkgolden.com) which in turn derive its icons from an old forum distribution. the idea of all these icons playing together in a celebration is a classic.
 
 ### drum sounds
 the drum sounds are from [Acoustic drumkit example sounds](http://www.akaipro.com/)
