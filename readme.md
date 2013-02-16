@@ -120,9 +120,10 @@ currently the only music in this game is <喜氣洋洋> (literally translates to
 ```
 喜氣洋洋
 
-作詞：鄭國江
-作曲：五輪真弓
-編曲：吳智強
+主唱: 徐小鳳
+作詞: 鄭國江
+作曲: 五輪真弓
+編曲: 吳智強
 
 齊鼓掌(高歌)　歌聲放今晚開心唱請鼓掌
 齊鼓掌(高歌)　歌聲唱今晚開心唱請欣賞
