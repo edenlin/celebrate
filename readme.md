@@ -1,6 +1,7 @@
 # Celebrate
 ![screenshot](http://tyt2y3.github.com/celebrate/web/image/cap01.png)
 Let's celebrate! together with the golden orchestra. [Play now!](http://tyt2y3.github.com/celebrate)
+
 tags: 喜氣洋洋, 高登, 遊戲, 太鼓
 
 ## how to play
