@@ -9,6 +9,7 @@ tags: 喜氣洋洋, 高登, 遊戲, 太鼓
  - When started, use `v`,`b` and `space` to hit the incoming bits.
  - you can append `?HTML5` (upper case) to the end of url to switch to HTML5 audio backend. default backend is flash via SoundManager2.
  - `p` can pause the game
+ - disable annoying Firefox quick find by unchecking "Search for text when I start typing" in Options > Advanced > General
 
 ## beat composer
 This project comes with a modest but powerful [beat composer](http://tyt2y3.github.com/celebrate/src/editor.html).
