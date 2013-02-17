@@ -208,13 +208,6 @@ function onhit(id,dist)
 	//
 	show($(mess));
 	show($('hitcount'));
-	$('hitmessage').className = 'pop';
-	$('currentscore').className = 'pop';
-	setTimeout(function()
-	{
-		$('hitmessage').className = '';
-		$('currentscore').className = '';
-	}, 1000*showtime/6);
 	setTimeout(function()
 	{
 		hide($(mess));
@@ -284,10 +277,10 @@ create_sound.ready(function()
 	$('scoreboard').innerHTML = 
 	'<span style="font-size: 40px;">Score: '+score.total+'</span><br>'+
 	'Perfect: '+score.perfect+', '+'Good: '+score.good+', '+'Bad: '+score.bad+','+'Miss: '+score.miss+'<br>'+
-	'max. cont. Perfect: '+score.max_cont_perfect+'<br>'+
-	'max. cont. Good: '+score.max_cont_good+'<br>'+
-	'max. cont. Bad: '+score.max_cont_bad+'<br>'+
-	'max. cont. Miss: '+score.max_cont_miss+'<br>';
+	'Perfect combo: '+score.max_cont_perfect+'<br>'+
+	'Good combo: '+score.max_cont_good+'<br>'+
+	'Bad combo: '+score.max_cont_bad+'<br>'+
+	'Miss combo: '+score.max_cont_miss+'<br>';
 	show($('scoreboard'));
 	iconset.drumset.onhit = iconset.hit;
 		},
